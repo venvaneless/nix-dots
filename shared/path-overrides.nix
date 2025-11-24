@@ -10,19 +10,21 @@
 #   config.sharedPaths.<name>
 # ============================================================
 
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 let
-  isDarwin = pkgs.stdenv.isDarwin;
-  isLinux  = pkgs.stdenv.isLinux;
+  system   = builtins.currentSystem;
+  isDarwin = lib.hasInfix "darwin" system;
+  isLinux  = lib.hasInfix "linux" system;
 in
 {
+  # Import modules *without* touching `config` inside `imports`
   imports =
-    [	./paths-shared.nix	]
+    [ ./paths-shared.nix ]
     ++ lib.optional isDarwin ../hosts/darwin/paths-darwin.nix
     ++ lib.optional isLinux  ../hosts/linux/paths-linux.nix;
 
-  # Merge shared + OS-specific into one namespace
+  # Merge all path namespaces into one public API
   config.sharedPaths =
     (config.pathsShared or {})
     // (config.pathsDarwin or {})
