@@ -14,7 +14,7 @@ let
   
 in
 {
-  pathsShared = {
+	config.pathsShared = {
 
     # --- Base folders ---
     home         = home;

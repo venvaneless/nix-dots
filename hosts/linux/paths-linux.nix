@@ -4,7 +4,7 @@ let
   home = config.home.homeDirectory;
 in	
 {
-  pathsLinux = {
+	config.pathsLinux = {
     config				= "${home}/.config";
     data					= "${home}/.local/share";
     cache					= "${home}/.cache";

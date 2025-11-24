@@ -29,7 +29,7 @@ let
 
 in
 {
-  pathsDarwin = {
+	config.pathsDarwin = {
 
     # ------------------------------------------------------------
     # CORE macOS DIRECTORIES
