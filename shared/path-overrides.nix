@@ -13,6 +13,13 @@
 
 { config, lib, ... }:
 
+{
+	imports = [
+    ./paths-shared.nix
+    ../hosts/darwin/paths-darwin.nix
+    ../hosts/linux/paths-linux.nix
+  ];
+
   # Merge all path namespaces into one public API.
   config.sharedPaths =
     (config.pathsShared or {})
