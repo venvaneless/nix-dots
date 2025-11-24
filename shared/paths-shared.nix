@@ -10,13 +10,15 @@
 
 let
   home = config.home.homeDirectory;
+  dotfiles = "${home}/dotfiles";
+  
 in
 {
   pathsShared = {
 
     # --- Base folders ---
     home         = home;
-    dotfiles     = "${home}/dotfiles";
+    dotfiles     = dotfiles;
 
     # --- Dotfiles subfolders ---
     zsh          = "${dotfiles}/zsh";
