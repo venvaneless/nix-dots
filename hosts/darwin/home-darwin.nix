@@ -10,27 +10,25 @@
 { config, lib, inputs, ... }:
 
 {
-	imports = [
-		# --- DARWIN HOME-MANAGER ----
-		inputs.home-manager.darwinModules.home-manager
-	];
+  imports = [
+    # --- DARWIN HOME-MANAGER ----
+    inputs.home-manager.darwinModules.home-manager
+  ];
  
-  
   home-manager = {
     # - System pkgs
     # - HM user package
     useGlobalPkgs   = true;
     useUserPackages = true;
 
+    # --- DARWIN HOME-MANAGER MODULES HERE ----
+    users.ven = {
+      # --- DARWIN HOME-MANAGER PATH ----
+      home.sessionPath = [
+        "${config.home.homeDirectory}/.local/bin"
+      ];
 
-  # --- DARWIN HOME-MANAGER MODULES HERE ----
-  users.ven = {
-    # --- DARWIN HOME-MANAGER PATH ----
-    home.sessionPath = [
-      "${config.home.homeDirectory}/.local/bin"
-  	};
-      
       # More Darwin HM modules can go here
-        };
-      };
-    }
+    };
+  };
+}
