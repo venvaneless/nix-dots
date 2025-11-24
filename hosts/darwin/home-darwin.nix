@@ -12,7 +12,7 @@
 {
 	imports = [
 		# --- DARWIN HOME-MANAGER ----
-    home-manager.darwinModules.home-manager
+		inputs.home-manager.darwinModules.home-manager
 	];
  
   
