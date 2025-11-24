@@ -1,8 +1,8 @@
 { config, ... }:
 
 let
-  home = config.home.homeDirectory;
-in
+  home = home.homeDirectory;
+in	
 {
   pathsLinux = {
     config				= "${home}/.config";
