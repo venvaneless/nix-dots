@@ -10,7 +10,7 @@
 #   config.sharedPaths.<name>
 # ============================================================
 
-{ config, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   isDarwin = pkgs.stdenv.isDarwin;
