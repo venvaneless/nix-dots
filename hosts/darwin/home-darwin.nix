@@ -13,7 +13,7 @@
 	imports = [
 		# --- DARWIN HOME-MANAGER ----
     home-manager.darwinModules.home-manager
-  ];
+	];
  
   
   home-manager = {
@@ -21,11 +21,10 @@
     # - HM user package
     useGlobalPkgs   = true;
     useUserPackages = true;
-  };
-}
+
 
   # --- DARWIN HOME-MANAGER MODULES HERE ----
-  home-manager.users.ven = {
+  users.ven = {
     imports = [
       ../../../shared/home/system-shared.nix
     ];
@@ -35,4 +34,5 @@
       "${config.home.homeDirectory}/.local/bin"
     ];
   };
+};
 }
