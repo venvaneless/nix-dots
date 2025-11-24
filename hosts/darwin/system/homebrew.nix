@@ -57,7 +57,7 @@
     casks = [
       {
         name = "ungoogled-chromium";
-        args = { appdir = applicationsRoot; };
+        args = { appdir = config.sharedPaths.appsRoot; };
       }
     ];
   };
