@@ -14,8 +14,8 @@
 
 let
   
-  isDarwin = lib.hasInfix "darwin" system;
-  isLinux  = lib.hasInfix "linux" system;
+  isDarwin = pkgs.stdenv.isDarwin;
+  isLinux  = pkgs.stdenv.isLinux;
 in
 {
   # Import modules *without* touching `config` inside `imports`
