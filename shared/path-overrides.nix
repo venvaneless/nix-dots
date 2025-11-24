@@ -10,7 +10,7 @@
 #   config.sharedPaths.<name>
 # ============================================================
 
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 let
   isDarwin = pkgs.stdenv.isDarwin;
@@ -18,9 +18,7 @@ let
 in
 {
   imports =
-    [
-      ./paths-shared.nix
-    ]
+    [	./paths-shared.nix	]
     ++ lib.optional isDarwin ../hosts/darwin/paths-darwin.nix
     ++ lib.optional isLinux  ../hosts/linux/paths-linux.nix;
 
