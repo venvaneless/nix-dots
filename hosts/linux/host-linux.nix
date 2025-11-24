@@ -9,15 +9,8 @@
 { config, pkgs, lib, inputs, ... }:
 
 {
-  imports = [
-  	# Paths for Linux
-  	../../shared/path-overrides.nix
-   ../../shared/path-overrides.nix
-   
-   # Home-level modules for Linux
-    ./home/home-liux.nix
-
-
-    
+	imports = [
+    # System-level modules
+    # coming soon...
   ];
 }

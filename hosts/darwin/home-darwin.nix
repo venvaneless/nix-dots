@@ -25,14 +25,12 @@
 
   # --- DARWIN HOME-MANAGER MODULES HERE ----
   users.ven = {
-    imports = [
-      ../../../shared/home/system-shared.nix
-    ];
-
     # --- DARWIN HOME-MANAGER PATH ----
     home.sessionPath = [
       "${config.home.homeDirectory}/.local/bin"
-    ];
-  };
-};
-}
+  	};
+      
+      # More Darwin HM modules can go here
+        };
+      };
+    }
