@@ -1,56 +1,65 @@
 # /Users/ven/dotfiles/nix/flake.nix
-#
-# FLAKE: MAIN ENTRYPOINT
-# ================================================
-# Provides:
-#   - nix-darwin system configuration (macbook)
-#   - Integrated Home Manager configuration (via index.nix)
-# ================================================
 
 {
-  description = "Ven’s setup";
+  description = "Ven's modular multi-host Darwin + NixOS setup";
 
-  # Allow committing without cleaning build artifacts
   nixConfig.allow-dirty = true;
 
-  # ------------------------------------------------------------
-  # --- INPUTS ---
-  # ------------------------------------------------------------
   inputs = {
-    nixpkgs.url      = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    darwin.url       = "github:LnL7/nix-darwin";
-    home-manager.url = "github:nix-community/home-manager";
-    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+    nixpkgs.url       = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    darwin.url        = "github:LnL7/nix-darwin";
+    home-manager.url  = "github:nix-community/home-manager";
+    nix-homebrew.url  = "github:zhaofengli/nix-homebrew";
 
-    # HM follows nixpkgs
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  # ------------------------------------------------------------
-  # 
-  # --- OUTPUTS
-  # ------------------------------------------------------------
-  outputs = inputs@{ nixpkgs, darwin, home-manager, nix-homebrew, ... }:
+  outputs = inputs@{ self, nixpkgs, darwin, home-manager, nix-homebrew, ... }:
   let
-    system = "aarch64-darwin";
-    pkgs   = import nixpkgs { inherit system; };
+    forSystem = system: import nixpkgs { inherit system; };
   in
   {
-    # --- nix-darwin SYSTEM ---
-    darwinConfigurations.macbook = darwin.lib.darwinSystem {
-      inherit system;
-      specialArgs = { inherit inputs nix-homebrew home-manager; };
-      modules = [
-        ./darwin/index.nix
-      ];
+    # ============================================================
+    # DARWIN HOST (nix-darwin + integrated Home Manager)
+    # ============================================================
+
+    darwinConfigurations = {
+      macbook = darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+
+        specialArgs = {
+          inherit inputs home-manager nix-homebrew;
+        };
+
+        modules = [
+          ./hosts/darwin/host-darwin.nix
+          ./hosts/darwin/home-darwin.nix
+          ./shared/path-overrides.nix
+        ];
+      };
     };
 
-    # --- No standalone home-manager
-    # ------------------------------------------------------------
-    homeConfigurations = {};
+    # ============================================================
+    # NIXOS HOST (NixOS + integrated Home Manager)
+    # ============================================================
 
-    # --- FLAKE APPS ---
-    # ------------------------------------------------------------
-    apps.${system} = {};
+    nixosConfigurations = {
+      linux = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+
+        specialArgs = {
+          inherit inputs home-manager;
+        };
+
+        modules = [
+          ./hosts/linux/host-linux.nix
+          ./hosts/linux/home-linux.nix
+          ./shared/path-overrides.nix
+        ];
+      };
+    };
+
+    # No standalone HM. No other outputs.
+    apps = { };
   };
 }
