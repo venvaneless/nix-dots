@@ -58,6 +58,7 @@
       {
         name = "ungoogled-chromium";
         args = { appdir = config.sharedPaths.appsRoot; };
+      }
     ];
   };
 }
