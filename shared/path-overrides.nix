@@ -25,8 +25,8 @@ in
     ++ lib.optional isLinux  ../hosts/linux/paths-linux.nix;
 
   # Merge all path namespaces into one public API
-  config.sharedPaths =
-    (config.pathsShared or {})
-    // (config.pathsDarwin or {})
-    // (config.pathsLinux  or {});
+  # config.sharedPaths =
+  # (config.pathsShared or {})
+  # // (config.pathsDarwin or {})
+  #  // (config.pathsLinux  or {});
 }

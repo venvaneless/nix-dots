@@ -1,7 +1,7 @@
 { config, ... }:
 
 let
-  home = home.homeDirectory;
+  home = config.home.homeDirectory;
 in	
 {
   pathsLinux = {
