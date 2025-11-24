@@ -7,7 +7,7 @@
 # Shell modules (zsh, fzf, starship) are imported ONLY by zsh.nix.
 # ============================================================
 
-{ config, pkgs, lib, inputs, ... }:
+{ config, lib, inputs, ... }:
 
 {
 	imports = [
