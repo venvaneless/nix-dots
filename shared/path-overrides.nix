@@ -10,10 +10,10 @@
 #   config.sharedPaths.<name>
 # ============================================================
 
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 let
-  system   = builtins.currentSystem;
+  
   isDarwin = lib.hasInfix "darwin" system;
   isLinux  = lib.hasInfix "linux" system;
 in
