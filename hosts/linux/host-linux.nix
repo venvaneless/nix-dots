@@ -10,13 +10,14 @@
 
 {
   imports = [
-    # Linux-specific system modules (optional future)
-    ./system/system-linux.nix
+  	# Paths for Linux
+  	../../shared/path-overrides.nix
+   ../../shared/path-overrides.nix
+   
+   # Home-level modules for Linux
+    ./home/home-liux.nix
 
-    # Standalone Home Manager config
-    ./home/linux-home.nix
 
-    # Cross-platform + linux-specific paths
-    ../../shared/path-overrides.nix
+    
   ];
 }
