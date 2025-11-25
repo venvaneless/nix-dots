@@ -20,7 +20,7 @@
 {
   # ---- USER DEFINITION (ALL MACHINES) ----
   home.username = "ven";
-  home.homeDirectory = sharedPaths.home;
+  home.homeDirectory = config.home.homeDirectory;  
   home.stateVersion = "24.11";
 
   # ---- CORE HOME MANAGER ----
@@ -30,11 +30,14 @@
   programs.git.enable = true;
   programs.ssh.enable = true;
 
+  # ---- SESSION PATH FOR BOTH SYSTEMS ----
+  home.sessionPath = [
+    "${sharedPaths.home}/.local/bin"
+  ];
+
   # ---- SHARED ENVIRONMENT ----
   home.sessionVariables = {
     EDITOR = "nvim";
     LANG   = "en_US.UTF-8";
   };
-
-  # No imports here — zsh.nix imports its own shell modules.
 }

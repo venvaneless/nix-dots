@@ -6,8 +6,8 @@
 { config, lib, inputs, ... }:
 
 {
+	 # --- DARWIN HOME-MANAGER ----
   imports = [
-    # --- DARWIN HOME-MANAGER ----
     inputs.home-manager.darwinModules.home-manager
   ];
 
@@ -17,18 +17,13 @@
 
     # ---- pass sharedPaths to HM ----
     extraSpecialArgs = {
-      inherit (config) sharedPaths;
+      sharedPaths = config.sharedPaths;
     };
 
     users.ven = {
-      # ---- SHARED HOME MANAGER ROOT MODULE ----
       imports = [
+      	# ---- SHARED HOME MANAGER ROOT MODULE ----
         ../../shared/home-shared.nix
-      ];
-
-      # ---- DARWIN HOME-MANAGER PATH ----
-      home.sessionPath = [
-        "${config.home.homeDirectory}/.local/bin"
       ];
     };
   };

@@ -6,8 +6,8 @@
 { config, pkgs, lib, inputs, ... }:
 
 {
+	# --- LINUX HOME-MANAGER ----
   imports = [
-    # --- LINUX HOME-MANAGER ----
     inputs.home-manager.nixosModules.home-manager
   ];
 
@@ -21,13 +21,9 @@
     };
 
     users.ven = {
-      # ---- SHARED HOME MANAGER ROOT MODULE ----
       imports = [
+      	# ---- SHARED HOME MANAGER ROOT MODULE ----
         ../../shared/home-shared.nix
-      ];
-
-      home.sessionPath = [
-        "${config.home.homeDirectory}/.local/bin"
       ];
     };
   };

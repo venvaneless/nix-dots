@@ -42,7 +42,7 @@
   };
 
 
-  # --- HOST IDENTITY ---
+  # --- SYSTEM SETTINGS ---
   # ------------------------------------------------------------
   networking.hostName = "Vens-MacBook-Pro";
 

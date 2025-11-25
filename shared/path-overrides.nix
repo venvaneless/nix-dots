@@ -35,38 +35,24 @@
     sharedPaths = lib.mkOption { type = lib.types.attrs; default = {}; };
   };
 
-  # ---- IMPORTS ----
-  # ------------------------------------------------------------
+    # ------------------------------------------------------------
+    # ---- IMPORTS ----
+    # Load all modules.
+    # Only one will define pathsDarwin or pathsLinux.
+    # ------------------------------------------------------------
+  
   imports = [
     ./paths-shared.nix
     ../hosts/darwin/paths-darwin.nix
     ../hosts/linux/paths-linux.nix
   ];
 
-  # ---- PATH DEFINITIONS ----
-  # Now we restrict definitions using mkIf.
-  # This is the SAFE way to do per-OS logic.
   # ------------------------------------------------------------
-  config = {
-    pathsDarwin = lib.mkIf (config.system == "aarch64-darwin") config.pathsDarwin;
-    pathsLinux  = lib.mkIf (config.system == "x86_64-linux")  config.pathsLinux;
-
- # ---- NAMESPACES ----
-  # This produces:
-  #   config.sharedPaths.<variable>
-  #
-  # On macOS:
-  #   sharedPaths = pathsShared // pathsDarwin
-  #
-  # On Linux:
-  #   sharedPaths = pathsShared // pathsLinux
-  #
-  # On both:
-  #   sharedPaths is always defined, safe to reference anywhere.
+  # ---- NAMESPACES ----
+  # Merge namespaces without conditions or rewriting.
   # ------------------------------------------------------------
-    sharedPaths =
-      (config.pathsShared or {})
-      // (lib.optionalAttrs (config.system == "aarch64-darwin") config.pathsDarwin)
-      // (lib.optionalAttrs (config.system == "x86_64-linux")  config.pathsLinux);
-  };
+  config.sharedPaths =
+    config.pathsShared
+    // config.pathsDarwin
+    // config.pathsLinux;
 }
