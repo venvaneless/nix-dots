@@ -62,8 +62,8 @@
     [
       ./paths-shared.nix
     ]
-    ++ lib.optional config.system.isDarwin ../hosts/darwin/paths-darwin.nix
-    ++ lib.optional config.system.isLinux  ../hosts/linux/paths-linux.nix;
+    ++ lib.optional config._module.system == "aarch64-darwin" ../hosts/darwin/paths-darwin.nix
+    ++ lib.optional config._module.system == "x86_64-linux"  ../hosts/linux/paths-linux.nix;
 
 
   # ---- NAMESPACES ----
