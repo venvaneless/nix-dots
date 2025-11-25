@@ -3,10 +3,10 @@
 # HOME MANAGER (DARWIN-INTEGRATED)
 # ============================================================
 
-{ config, lib, inputs, ... }:
+{ config, lib, inputs, pkgs, ... }:
 
 # --- SET MACHINE: macOS ----
-lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
+lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
 	
 	# --- DARWIN HOME-MANAGER ----
   imports = [
