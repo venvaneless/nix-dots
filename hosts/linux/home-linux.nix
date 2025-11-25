@@ -18,7 +18,7 @@
 
   home-manager.users.ven = {
     imports = [
-      .../../../shared/home-shared.nix
+      ../../../shared/home-shared.nix
     ];
 
     home.sessionPath = [
