@@ -5,7 +5,7 @@
 # --- SET MACHINE: LINUX ----
 lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
 
-	# --- LINUX HOME-MANAGER ----
+  # --- LINUX HOME-MANAGER ----
   imports = [
     inputs.home-manager.nixosModules.home-manager
   ];
@@ -21,7 +21,7 @@ lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
 
     users.ven = {
       imports = [
-      	# ---- SHARED HOME MANAGER ROOT MODULE ----
+        # ---- SHARED HOME MANAGER ROOT MODULE ----
         ../../shared/home-shared.nix
       ];
     };
