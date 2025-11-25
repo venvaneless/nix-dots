@@ -10,7 +10,7 @@
 # No dependency on Home Manager here.
 # ================================================
 
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
