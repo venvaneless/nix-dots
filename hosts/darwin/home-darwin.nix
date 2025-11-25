@@ -20,6 +20,11 @@
     # - HM user package
     useGlobalPkgs   = true;
     useUserPackages = true;
+    
+    # ---- pass sharedPaths to HM ----
+        extraSpecialArgs = {
+          inherit (config) sharedPaths;
+        };
 
     # --- DARWIN HOME-MANAGER MODULES HERE ----
     users.ven = {
