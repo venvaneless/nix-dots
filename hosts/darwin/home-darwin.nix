@@ -15,13 +15,16 @@
     inputs.home-manager.darwinModules.home-manager
   ];
  
-  
   home-manager = {
     # - System pkgs
     # - HM user package
     useGlobalPkgs   = true;
     useUserPackages = true;
 
+    # ---- pass sharedPaths to HM (was missing!) ----
+    extraSpecialArgs = {
+      sharedPaths = config.sharedPaths;
+    };
 
     # --- DARWIN HOME-MANAGER MODULES HERE ----
     users.ven = {
