@@ -1,7 +1,5 @@
-# /Users/ven/dotfiles/nix/flake.nix
-
 {
-  description = "Ven's setup";
+  description = "Ven’s setup";
 
   nixConfig.allow-dirty = true;
 
@@ -14,61 +12,58 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ nixpkgs, darwin, home-manager, nix-homebrew, ... }:
+  outputs = inputs@{ self, nixpkgs, darwin, home-manager, nix-homebrew, ... }:
   let
-    # This is only for evaluating Darwin config tools. It doesn't hurt Linux.
-    system = "aarch64-darwin";
-    pkgs   = import nixpkgs { inherit system; };
+    pkgsDarwin = import nixpkgs { system = "aarch64-darwin"; };
+    pkgsLinux  = import nixpkgs { system = "x86_64-linux"; };
   in
   {
-    # ============================================================
-    # DARWIN HOST (nix-darwin + integrated Home Manager)
-    # ============================================================
+    ##############################
+    ## Integrated Darwin HM
+    ##############################
+    darwinConfigurations.macbook = darwin.lib.darwinSystem {
+      system = "aarch64-darwin";
 
-    darwinConfigurations = {
-      macbook = darwin.lib.darwinSystem {
-        inherit system;
+      specialArgs = { inherit inputs home-manager nix-homebrew; };
 
-        specialArgs = {
-          inherit inputs nix-homebrew home-manager;
-        };
+      modules = [
+        # ./hosts/darwin/paths-darwin.nix
+        # ./shared/path-overrides.nix
 
-        modules = [
-          ./hosts/darwin/paths-darwin.nix
-          ./shared/path-overrides.nix
-
-          ./hosts/darwin/host-darwin.nix
-          ./hosts/darwin/home-darwin.nix
-        ];
-      };
+        # ./hosts/darwin/host-darwin.nix
+      ];
     };
 
-    # ============================================================
-    # NIXOS HOST (NixOS + integrated Home Manager)
-    # ============================================================
+    ##############################
+    ## Integrated Linux HM
+    ##############################
+    nixosConfigurations.linux = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
 
-    nixosConfigurations = {
-      linux = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+      specialArgs = { inherit inputs home-manager; };
 
-        specialArgs = {
-          inherit inputs home-manager;
-        };
+      modules = [
+        #./hosts/linux/paths-linux.nix
+        #./shared/path-overrides.nix
 
-        modules = [
-          ./hosts/linux/paths-linux.nix
-          ./shared/path-overrides.nix
-
-          ./hosts/linux/host-linux.nix
-          ./hosts/linux/home-linux.nix
-        ];
-      };
+        #./hosts/linux/host-linux.nix
+      ];
     };
 
-    # ============================================================
-    # MISC
-    # ============================================================
+    ##############################
+    ## Standalone Darwin HM
+    ##############################
+    homeConfigurations.ven-darwin = home-manager.lib.homeManagerConfiguration {
+      pkgs = pkgsDarwin;
+      modules = [ .# /hosts/darwin/home-darwin.nix ];
+    };
 
-    apps = { };
+    ##############################
+    ## Standalone Linux HM
+    ##############################
+    homeConfigurations.ven-linux = home-manager.lib.homeManagerConfiguration {
+      pkgs = pkgsLinux;
+      modules = [ # ./hosts/linux/home-linux.nix ];
+    };
   };
 }

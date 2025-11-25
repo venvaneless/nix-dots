@@ -92,7 +92,7 @@
 
 
   # --- FONTS ---
-  fonts.fonts = [
+  fonts.packages = [
     pkgs.jetbrains-mono
     pkgs.noto-fonts
   ];
