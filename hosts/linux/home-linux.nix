@@ -2,14 +2,16 @@
 
 { config, pkgs, lib, inputs, ... }:
 
-{
-	# --- LINUX HOME-MANAGER ----
+# --- SET MACHINE: LINUX ----
+lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
+
   imports = [
+  # --- LINUX HOME-MANAGER ----
     inputs.home-manager.nixosModules.home-manager
   ];
 
   home-manager = {
-  	# ---- pass sharedPaths to HM ----
+  # ---- pass sharedPaths to HM ----
     useGlobalPkgs   = true;
     useUserPackages = true;
 
@@ -22,8 +24,6 @@
       	# ---- SHARED HOME MANAGER ROOT MODULE ----
         ../../shared/home-shared.nix
       ];
-
-      # linux-only HM things later…
     };
   };
 }

@@ -13,18 +13,21 @@
 { config, lib, ... }:
 
 let
-  # hostHome is provided by host path modules
+  isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
+  isLinux  = pkgs.stdenv.hostPlatform.isLinux;
+
   hostHome =
-    if config.pathsDarwin ? home then config.pathsDarwin.home
-    else if config.pathsLinux ? home then config.pathsLinux.home
+    if isDarwin then config.pathsDarwin.home
+    else if isLinux then config.pathsLinux.home
     else null;
 
   dotfiles =
     if hostHome != null then "${hostHome}/dotfiles" else null;
+
 in
 {
-  config.pathsShared = lib.mkIf (hostHome != null) {
-
+	config.pathsShared = lib.mkIf (hostHome != null) {
+		
     # --- Base folders ---
     home     = hostHome;
     dotfiles = dotfiles;
