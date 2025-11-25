@@ -46,12 +46,6 @@
   # ------------------------------------------------------------
   networking.hostName = "Vens-MacBook-Pro";
 
-
-  # --- nix-daemon ---
-  # Determinate manages Nix. Leave this disabled.
-  nix.enable = false;
-
-
   # --- SHELL INTEGRATION ---
   # Safe because macOS already uses zsh. This only declares it.
   programs.zsh.enable = true;
