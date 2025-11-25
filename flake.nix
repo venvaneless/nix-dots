@@ -16,6 +16,7 @@
 
   outputs = inputs@{ nixpkgs, darwin, home-manager, nix-homebrew, ... }:
   let
+    # This is only for evaluating Darwin config tools. It doesn't hurt Linux.
     system = "aarch64-darwin";
     pkgs   = import nixpkgs { inherit system; };
   in
@@ -24,13 +25,18 @@
     # DARWIN HOST (nix-darwin + integrated Home Manager)
     # ============================================================
 
-    darwinConfigurations.macbook = darwin.lib.darwinSystem {
-    		inherit system;
-      	specialArgs = { inherit inputs nix-homebrew home-manager; };
+    darwinConfigurations = {
+      macbook = darwin.lib.darwinSystem {
+        inherit system;
+
+        specialArgs = {
+          inherit inputs nix-homebrew home-manager;
+        };
+
         modules = [
-        	./hosts/darwin/paths-darwin.nix
-       		./shared/path-overrides.nix
-          
+          ./hosts/darwin/paths-darwin.nix
+          ./shared/path-overrides.nix
+
           ./hosts/darwin/host-darwin.nix
           ./hosts/darwin/home-darwin.nix
         ];
@@ -50,16 +56,19 @@
         };
 
         modules = [
-        	./hosts/linux/paths-linux.nix
-        	./shared/path-overrides.nix
-       		
+          ./hosts/linux/paths-linux.nix
+          ./shared/path-overrides.nix
+
           ./hosts/linux/host-linux.nix
           ./hosts/linux/home-linux.nix
         ];
       };
     };
 
-    # No standalone HM. No other outputs.
+    # ============================================================
+    # MISC
+    # ============================================================
+
     apps = { };
   };
 }
