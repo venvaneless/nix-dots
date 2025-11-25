@@ -24,7 +24,7 @@
     users.ven = {
       # Shared HM Module
       imports = [
-        ../../../shared/home-shared.nix
+        ../../shared/home-shared.nix
       ];
 
       home.sessionPath = [

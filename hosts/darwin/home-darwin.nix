@@ -25,7 +25,8 @@
     users.ven = {
     		# Shared HM Module
     		imports = [
-      	../../../shared/home-shared.nix
+      	../../shared/home-shared.nix
+       
       ];
       
       # --- DARWIN HOME-MANAGER PATH ----
