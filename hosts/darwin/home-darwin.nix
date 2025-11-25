@@ -1,11 +1,4 @@
 # /Users/ven/dotfiles/nix/hosts/darwin/home-darwin.nix
-#
-# HOME MANAGER (DARWIN-INTEGRATED)
-# ============================================================
-# Makes Home Manager part of nix-darwin.
-# Loads shared HM config and Darwin-only HM overrides.
-# Shell modules (zsh, fzf, starship) are imported ONLY by zsh.nix.
-# ============================================================
 
 { config, lib, inputs, ... }:
 
