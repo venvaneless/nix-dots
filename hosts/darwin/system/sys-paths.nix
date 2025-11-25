@@ -23,7 +23,7 @@ in
     sp.dockerPlugins
 
     # --- ZED CLI ---
-    "${sp.applicationsProductivity}/Zed.app/Contents/MacOS"
+    "${sp.appsProductivity}/Zed.app/Contents/MacOS"
 
     # --- NIX PROFILES ---
     "/nix/var/nix/profiles/default/bin"
