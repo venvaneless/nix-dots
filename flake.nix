@@ -1,7 +1,7 @@
 # /Users/ven/dotfiles/nix/flake.nix
 
 {
-  description = "Ven's modular multi-host Darwin + NixOS setup";
+  description = "Ven's setup";
 
   nixConfig.allow-dirty = true;
 
