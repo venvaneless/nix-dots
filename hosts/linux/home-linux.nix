@@ -2,9 +2,6 @@
 #
 # HOME MANAGER (LINUX)
 # ============================================================
-# Standalone Home Manager module for Linux/NixOS.
-# Loads shared HM config and Linux-only HM overrides.
-# ============================================================
 
 { config, pkgs, lib, inputs, ... }:
 
@@ -15,19 +12,16 @@
   ];
 
   home-manager = {
-    # - System pkgs
-    # - HM user package
     useGlobalPkgs   = true;
     useUserPackages = true;
 
     # ---- pass sharedPaths to HM ----
     extraSpecialArgs = {
-        sharedPaths = config.sharedPaths;
-      };
+      sharedPaths = config.sharedPaths;
+    };
 
-    # --- LINUX HOME-MANAGER MODULES HERE ----
     users.ven = {
-      # Shared HM Module
+      # ---- SHARED HOME MANAGER ROOT MODULE ----
       imports = [
         ../../shared/home-shared.nix
       ];

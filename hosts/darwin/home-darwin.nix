@@ -1,10 +1,6 @@
-# /Users/ven/dotfiles/nix/hosts/darwin/darwin-home.nix
+# /Users/ven/dotfiles/nix/hosts/darwin/home-darwin.nix
 #
 # HOME MANAGER (DARWIN-INTEGRATED)
-# ============================================================
-# Makes Home Manager part of nix-darwin.
-# Loads shared HM config and Darwin-only HM overrides.
-# Shell modules (zsh, fzf, starship) are imported ONLY by zsh.nix.
 # ============================================================
 
 { config, lib, inputs, ... }:
@@ -14,32 +10,26 @@
     # --- DARWIN HOME-MANAGER ----
     inputs.home-manager.darwinModules.home-manager
   ];
- 
+
   home-manager = {
-    # - System pkgs
-    # - HM user package
     useGlobalPkgs   = true;
     useUserPackages = true;
-    
-    # ---- pass sharedPaths to HM ----
-        extraSpecialArgs = {
-          inherit (config) sharedPaths;
-        };
 
-    # --- DARWIN HOME-MANAGER MODULES HERE ----
+    # ---- pass sharedPaths to HM ----
+    extraSpecialArgs = {
+      inherit (config) sharedPaths;
+    };
+
     users.ven = {
-    		# Shared HM Module
-    		imports = [
-      	../../shared/home-shared.nix
-       
+      # ---- SHARED HOME MANAGER ROOT MODULE ----
+      imports = [
+        ../../shared/home-shared.nix
       ];
-      
-      # --- DARWIN HOME-MANAGER PATH ----
+
+      # ---- DARWIN HOME-MANAGER PATH ----
       home.sessionPath = [
         "${config.home.homeDirectory}/.local/bin"
       ];
-      
-      
     };
   };
 }
