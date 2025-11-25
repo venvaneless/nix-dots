@@ -18,9 +18,12 @@
 { config, pkgs, lib, sharedPaths, ... }:
 
 {
+	
   # ---- USER DEFINITION (ALL MACHINES) ----
   home.username      = "ven";
-  home.homeDirectory = sharedPaths.home;
+  home.homeDirectory =
+      if isLinux then "/home/ven" else
+      if isDarwin then "/Users/ven" else unsupported;
   home.stateVersion  = "24.11";
 
   # ---- CORE HOME MANAGER ----

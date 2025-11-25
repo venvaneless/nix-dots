@@ -5,7 +5,9 @@
 
 { config, lib, inputs, ... }:
 
-{
+# --- SET MACHINE: macOS ----
+lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
+	
 	# --- DARWIN HOME-MANAGER ----
   imports = [
     inputs.home-manager.darwinModules.home-manager
@@ -25,8 +27,6 @@
       	# ---- SHARED HOME MANAGER ROOT MODULE ----
         ../../shared/home-shared.nix
       ];
-
-      # darwin-only HM things later…
     };
   };
 }

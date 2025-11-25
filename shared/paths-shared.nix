@@ -13,8 +13,9 @@
 { config, lib, pkgs, ... }:
 
 let
+	isLinux = pkgs.stdenv.hostPlatform.isLinux;
   isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
-  isLinux  = pkgs.stdenv.hostPlatform.isLinux;
+  unsupported = builtins.abort "Unsupported platform";
 
   hostHome =
     if isDarwin then config.pathsDarwin.home
