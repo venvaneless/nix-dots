@@ -10,19 +10,26 @@
 
 {
   imports = [
+    # --- LINUX HOME-MANAGER ----
     inputs.home-manager.nixosModules.home-manager
   ];
 
-  home-manager.useGlobalPkgs = true;
-  home-manager.useUserPackages = true;
+  home-manager = {
+    # - System pkgs
+    # - HM user package
+    useGlobalPkgs   = true;
+    useUserPackages = true;
 
-  home-manager.users.ven = {
-    imports = [
-      ../../../shared/home-shared.nix
-    ];
+    # --- LINUX HOME-MANAGER MODULES HERE ----
+    users.ven = {
+      # Shared HM Module
+      imports = [
+        ../../../shared/home-shared.nix
+      ];
 
-    home.sessionPath = [
-      "${config.home.homeDirectory}/.local/bin"
-    ];
+      home.sessionPath = [
+        "${config.home.homeDirectory}/.local/bin"
+      ];
+    };
   };
 }
