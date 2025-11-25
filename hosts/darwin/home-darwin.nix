@@ -6,7 +6,7 @@
 { config, lib, inputs, ... }:
 
 {
-	 # --- DARWIN HOME-MANAGER ----
+	# --- DARWIN HOME-MANAGER ----
   imports = [
     inputs.home-manager.darwinModules.home-manager
   ];
@@ -25,6 +25,8 @@
       	# ---- SHARED HOME MANAGER ROOT MODULE ----
         ../../shared/home-shared.nix
       ];
+
+      # darwin-only HM things later…
     };
   };
 }

@@ -19,9 +19,9 @@
 
 {
   # ---- USER DEFINITION (ALL MACHINES) ----
-  home.username = "ven";
-  home.homeDirectory = config.home.homeDirectory;  
-  home.stateVersion = "24.11";
+  home.username      = "ven";
+  home.homeDirectory = sharedPaths.home;
+  home.stateVersion  = "24.11";
 
   # ---- CORE HOME MANAGER ----
   programs.home-manager.enable = true;

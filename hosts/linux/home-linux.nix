@@ -1,7 +1,4 @@
 # /Users/ven/dotfiles/nix/hosts/linux/home-linux.nix
-#
-# HOME MANAGER (LINUX)
-# ============================================================
 
 { config, pkgs, lib, inputs, ... }:
 
@@ -12,10 +9,10 @@
   ];
 
   home-manager = {
+  	# ---- pass sharedPaths to HM ----
     useGlobalPkgs   = true;
     useUserPackages = true;
 
-    # ---- pass sharedPaths to HM ----
     extraSpecialArgs = {
       sharedPaths = config.sharedPaths;
     };
@@ -25,6 +22,8 @@
       	# ---- SHARED HOME MANAGER ROOT MODULE ----
         ../../shared/home-shared.nix
       ];
+
+      # linux-only HM things later…
     };
   };
 }

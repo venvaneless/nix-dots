@@ -1,10 +1,15 @@
 # /Users/ven/dotfiles/nix/hosts/linux/paths-linux.nix
+#
+# LINUX: System-level paths
+# ============================================================
 
 { config, ... }:
 
 let
-  home = "/home/ven";   # DO NOT read from config.home
-in {
+  # System-level home path for "ven" on Linux
+  home = "/home/ven";
+in
+{
   config.pathsLinux = {
     home    = home;
     config  = "${home}/.config";
