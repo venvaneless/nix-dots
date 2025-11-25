@@ -58,11 +58,12 @@
 
   # ---- PATH DEFINITIONS ----
   # ------------------------------------------------------------
-  imports = [
-    ./paths-shared.nix
-    ../hosts/darwin/paths-darwin.nix
-    ../hosts/linux/paths-linux.nix
-  ];
+  imports =
+    [
+      ./paths-shared.nix
+    ]
+    ++ lib.optional config.system.isDarwin ../hosts/darwin/paths-darwin.nix
+    ++ lib.optional config.system.isLinux  ../hosts/linux/paths-linux.nix;
 
 
   # ---- NAMESPACES ----

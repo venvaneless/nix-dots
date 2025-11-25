@@ -20,7 +20,7 @@
 {
   # ---- USER DEFINITION (ALL MACHINES) ----
   home.username = "ven";
-  home.homeDirectory = sharedPaths.home;
+  home.homeDirectory = "sharedPaths.home";
   home.stateVersion = "24.11";
 
   # ---- CORE HOME MANAGER ----
