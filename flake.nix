@@ -36,7 +36,6 @@
          	./hosts/darwin/paths-darwin.nix
         	./shared/path-overrides.nix
           
-          ./shared/system-shared.nix
           ./hosts/darwin/host-darwin.nix
           ./hosts/darwin/home-darwin.nix
         ];
@@ -60,7 +59,6 @@
          	./hosts/linux/paths-linux.nix
         	./shared/path-overrides.nix
           
-          ./shared/system-shared.nix
           ./hosts/linux/host-linux.nix
           ./hosts/linux/home-linux.nix
         ];

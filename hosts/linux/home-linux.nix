@@ -18,10 +18,7 @@
 
   home-manager.users.ven = {
     imports = [
-      ../../../shared/home/system-shared.nix
-
-      # Add linux-only HM modules here (later)
-      # ./linux-hm-settings.nix
+      .../../../shared/system-shared.nix
     ];
 
     home.sessionPath = [
