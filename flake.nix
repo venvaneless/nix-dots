@@ -14,23 +14,19 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ self, nixpkgs, darwin, home-manager, nix-homebrew, ... }:
+  outputs = inputs@{ nixpkgs, darwin, home-manager, nix-homebrew, ... }:
   let
-    forSystem = system: import nixpkgs { inherit system; };
+    system = "aarch64-darwin";
+    pkgs   = import nixpkgs { inherit system; };
   in
   {
     # ============================================================
     # DARWIN HOST (nix-darwin + integrated Home Manager)
     # ============================================================
 
-    darwinConfigurations = {
-      macbook = darwin.lib.darwinSystem {
-        system = "aarch64-darwin";
-
-        specialArgs = {
-          inherit inputs home-manager nix-homebrew;
-        };
-
+    darwinConfigurations.macbook = darwin.lib.darwinSystem {
+    		inherit system;
+      	specialArgs = { inherit inputs nix-homebrew home-manager; };
         modules = [
         	./hosts/darwin/paths-darwin.nix
        		./shared/path-overrides.nix
