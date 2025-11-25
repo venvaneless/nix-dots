@@ -22,8 +22,8 @@
 
     # ---- pass sharedPaths to HM ----
     extraSpecialArgs = {
-      inherit (config) sharedPaths;
-    };
+        sharedPaths = config.sharedPaths;
+      };
 
     # --- LINUX HOME-MANAGER MODULES HERE ----
     users.ven = {
