@@ -9,7 +9,7 @@
 { config, ... }:
 
 let
-  home = config.home.homeDirectory;
+  home = config.sharedPaths.home
   dotfiles = "${home}/dotfiles";
   
 in
