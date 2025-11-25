@@ -32,6 +32,7 @@
         };
 
         modules = [
+        	./shared/path-options.nix 
         	./shared/paths-shared.nix
          	./hosts/darwin/paths-darwin.nix
         	./shared/path-overrides.nix
@@ -55,6 +56,7 @@
         };
 
         modules = [
+        	./shared/path-options.nix 
         	./shared/paths-shared.nix
          	./hosts/linux/paths-linux.nix
         	./shared/path-overrides.nix
