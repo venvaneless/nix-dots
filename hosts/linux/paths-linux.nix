@@ -1,3 +1,5 @@
+# /Users/ven/dotfiles/linux/paths-linux.nix
+
 { config, ... }:
 
 let

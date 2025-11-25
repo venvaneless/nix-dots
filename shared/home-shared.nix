@@ -1,4 +1,4 @@
-# /Users/ven/dotfiles/nix/shared/home/system-shared.nix
+# /Users/ven/dotfiles/nix/shared/home-shared.nix
 #
 # HOME-MANAGER: SHARED ROOT MODULE
 # ============================================================

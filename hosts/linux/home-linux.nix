@@ -1,4 +1,4 @@
-# /Users/ven/dotfiles/nix/hosts/linux/home/home-linux.nix
+# /Users/ven/dotfiles/nix/hosts/linux/home-linux.nix
 #
 # HOME MANAGER (LINUX)
 # ============================================================
