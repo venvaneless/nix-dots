@@ -1,116 +1,78 @@
 # /Users/ven/dotfiles/nix/hosts/darwin/system/system.nix
-#
-# DARWIN: BASE SYSTEM CONFIGURATION
-# ============================================================
-# Provides core system-wide settings for macOS, including:
-#   - Host identity (hostname)
-#   - Core Nix configuration (flakes, caches, CLI settings)
-#   - System state version
-#   - System-level packages required by macOS only
-#
-# This file does *not* manage user-level packages or configs.
-# Home Manager handles the user session.
-# ============================================================
-
 { config, pkgs, lib, inputs, ... }:
 
 {
-  imports = [
-    ./sys-paths.nix
-    # other system modules…
-  ];
-
-  # --- CORE SETTINGS ---
   # ------------------------------------------------------------
-  nix.settings = {
-    # flakes + new CLI
-    experimental-features = [ "nix-command" "flakes" ];
-
-    # store optimizations
-    auto-optimise-store = true;
-
-    # binary caches
-    substituters = [
-      "https://cache.nixos.org"
-      "https://nix-community.cachix.org"
-    ];
-    trusted-public-keys = [
-      "nix-community.cachix.org-1:…"
-    ];
-
-    build-users-group = "nixbld";
-  };
-
-
-  # --- SYSTEM SETTINGS ---
+  # HOSTNAME
   # ------------------------------------------------------------
   networking.hostName = "Vens-MacBook-Pro";
 
-  # --- SHELL INTEGRATION ---
-  # Safe because macOS already uses zsh. This only declares it.
+  # Shell environment
   programs.zsh.enable = true;
 
-
-  # --- SYSTEM STATE VERSION ---
-  system.stateVersion = lib.mkForce 6;
-
-
-  # --- DOCK ---
+  # ------------------------------------------------------------
+  # DOCK SETTINGS
+  # ------------------------------------------------------------
   system.defaults.dock = {
     autohide = true;
     show-recents = true;
-    tilesize = 32;
+    tilesize = 65;
   };
 
-
-  # --- FINDER ---
+  # ------------------------------------------------------------
+  # FINDER SETTINGS
+  # ------------------------------------------------------------
   system.defaults.finder = {
     AppleShowAllExtensions = true;
     ShowPathbar = true;
     ShowStatusBar = true;
   };
 
-
-  # --- TRACKPAD ---
+  # ------------------------------------------------------------
+  # TRACKPAD SETTINGS
+  # ------------------------------------------------------------
   system.defaults.trackpad = {
     Clicking = true;
     TrackpadRightClick = false;
-    TrackpadCornerSecondaryClick = 2;  # bottom-right click
+    TrackpadCornerSecondaryClick = 2;
   };
 
-
-  # --- GARBAGE COLLECTOR ---
+  # ------------------------------------------------------------
+  # GARBAGE COLLECTOR (darwin-compatible schedule)
+  # ------------------------------------------------------------
   nix.gc = {
     automatic = true;
-    interval = "monthly";
+    interval = {
+      Weekday = 0;  # Sunday
+      Hour = 3;
+      Minute = 0;
+    };
     options = "--delete-older-than 30d";
   };
 
-
-  # --- NETWORKING ---
+  # ------------------------------------------------------------
+  # NETWORKING
+  # ------------------------------------------------------------
   networking.wakeOnLan.enable = false;
 
-
-  # --- FONTS ---
+  # ------------------------------------------------------------
+  # FONTS
+  # ------------------------------------------------------------
   fonts.packages = [
     pkgs.jetbrains-mono
     pkgs.noto-fonts
   ];
 
-
-  # --- SYSTEM PACKAGES ---
+  # ------------------------------------------------------------
+  # SYSTEM PACKAGES
+  # ------------------------------------------------------------
   environment.systemPackages = with pkgs; [
-    # nix-darwin rebuild helper
     inputs.darwin.packages.${pkgs.system}.darwin-rebuild
-
     bashInteractive
     git-crypt
-
     mkcert
     nssTools
-
     nginx
-
     nixd
     nil
   ];

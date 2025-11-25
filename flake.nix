@@ -24,13 +24,14 @@
     darwinConfigurations.macbook = darwin.lib.darwinSystem {
       system = "aarch64-darwin";
 
-      specialArgs = { inherit inputs home-manager nix-homebrew; };
+      specialArgs = {
+        inherit inputs home-manager nix-homebrew;
+      };
 
       modules = [
-        # ./hosts/darwin/paths-darwin.nix
-        # ./shared/path-overrides.nix
-
-        # ./hosts/darwin/host-darwin.nix
+      	./hosts/darwin/host-darwin.nix
+       
+       # .... system modules for darwin go here ...
       ];
     };
 
@@ -40,13 +41,12 @@
     nixosConfigurations.linux = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
 
-      specialArgs = { inherit inputs home-manager; };
+      specialArgs = {
+        inherit inputs home-manager;
+      };
 
       modules = [
-        #./hosts/linux/paths-linux.nix
-        #./shared/path-overrides.nix
-
-        #./hosts/linux/host-linux.nix
+      # .... system modules for linux go here ...
       ];
     };
 
@@ -55,7 +55,9 @@
     ##############################
     homeConfigurations.ven-darwin = home-manager.lib.homeManagerConfiguration {
       pkgs = pkgsDarwin;
-      modules = [ .# /hosts/darwin/home-darwin.nix ];
+      modules = [
+        # .... standalone modules for darwin go here ...
+      ];
     };
 
     ##############################
@@ -63,7 +65,9 @@
     ##############################
     homeConfigurations.ven-linux = home-manager.lib.homeManagerConfiguration {
       pkgs = pkgsLinux;
-      modules = [ # ./hosts/linux/home-linux.nix ];
+      modules = [
+        # .... standalone modules for linux go here ...
+      ];
     };
   };
 }
