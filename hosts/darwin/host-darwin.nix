@@ -1,33 +1,61 @@
 # /Users/ven/dotfiles/nix/hosts/darwin/host-darwin.nix
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, inputs, pathsDarwin, pathsShared, ... }:
 
 {
-  # --- SYSTEM USER (Darwin) ---
-  # nix-darwin system-level user (macOS user must already exist)
+  # ------------------------------------------------------------
+  # SYSTEM USER + STATE VERSION
+  # ------------------------------------------------------------
   system.primaryUser  = "ven";
   system.stateVersion = lib.mkForce 6;
 
-  # --- INTEGRATED HOME MANAGER (Darwin) ---
-  # Load the Home Manager module into nix-darwin
+  # Darwin user must exist on macOS already
+  users.users.ven.home = "/Users/ven";
+
+  # ------------------------------------------------------------
+  # CORE NIX SETTINGS
+  # ------------------------------------------------------------
+  nix.optimise.automatic = true;
+
+  nix.settings = {
+    experimental-features = [ "nix-command" "flakes" ];
+
+    substituters = [
+      "https://cache.nixos.org"
+      "https://nix-community.cachix.org"
+    ];
+    trusted-public-keys = [
+      "nix-community.cachix.org-1:…"
+    ];
+
+    build-users-group = "nixbld";
+  };
+
+  # ------------------------------------------------------------
+  # TOP-LEVEL MODULE IMPORTS
+  # ------------------------------------------------------------
   imports = [
+    # Integrated Home Manager
     inputs.home-manager.darwinModules.home-manager
 
-    # (you can add system modules later)
-    # ./system/system.nix
-    # ./system/homebrew.nix
-    # ./system/sys-paths.nix
+    # Path alias injection (Darwin + shared)
+    ./system/paths-darwin.nix
+    ../../shared/paths-shared.nix
+
+    # System modules
+    ./system/system.nix
   ];
 
-  # HM settings for integrated mode
+  # ------------------------------------------------------------
+  # HOME MANAGER CONFIG (INTEGRATED)
+  # ------------------------------------------------------------
   home-manager.useGlobalPkgs   = true;
   home-manager.useUserPackages = true;
 
-  # Attach the HM user config here
   home-manager.users.ven = {
     imports = [
-      # This is a Home Manager module, so it belongs HERE,
-      # not in the top-level nix-darwin imports list.
-      ../../shared/home-shared.nix
+    	./hosts/darwin/system/paths-darwin.nix
     ];
+
+    # If you want extra HM modules per user, add here.
   };
 }
