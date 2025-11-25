@@ -15,7 +15,7 @@
 #   - OS-specific modules
 # ============================================================
 
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, sharedPaths, ... }:
 
 {
   # ---- USER DEFINITION (ALL MACHINES) ----
