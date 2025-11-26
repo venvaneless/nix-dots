@@ -12,22 +12,22 @@ let
 in
 {
   environment.systemPath = [
-    # HOMEBREW
+    # ---- Homebrew ----
     "${sp.brewPrefix}/bin"
     "${sp.brewPrefix}/sbin"
 
-    # STANDARD MAC PATHS
+    # ---- System bin ----
     "/usr/local/bin"
     "/usr/local/sbin"
 
-    # DOCKER DESKTOP PATHS
+    # ---- Docker CLI ----
     sp.dockerBin
     sp.dockerPluginsDir
 
-    # ZED CLI
+    # ---- ZED CLI ----
     "${sp.applicationsProgramming}/Zed.app/Contents/MacOS"
 
-    # NIX PROFILES
+    # ---- NIX PROFILES ----
     "/nix/var/nix/profiles/default/bin"
   ];
 }

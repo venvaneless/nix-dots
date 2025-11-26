@@ -195,6 +195,8 @@
 
               # ---- Extra HM modules ----
               imports = [
+              	./shared/aliases-darwin.nix
+               ./shared/aliases-shared.nix
                 ./shared/shared-home.nix
               ];
             };
@@ -274,8 +276,10 @@
 
         # ---- Darwin: Standalone HM - Modules ----
         modules = [
-          # Aliases and paths for Darwin user-level HM.
+        # ---- Darwin aliases ----
           ./hosts/darwin/system/aliases-darwin.nix
+        
+          # ---- Shared aliases ----
           ./shared/aliases-shared.nix
 
           # ---- Darwin: Core HM User ----
@@ -318,8 +322,11 @@
 
         # ---- Linux: Standalone HM - Modules ----
         modules = [
-          # Shared aliases for Linux HM.
-          ./shared/aliases-shared.nix
+        # ---- Linux aliases ----
+         ./hosts/linux/system/aliases-linux.nix
+       
+         # ---- Shared aliases ----
+         ./shared/aliases-shared.nix
 
           # ---- Linux: Core HM User ----
           (

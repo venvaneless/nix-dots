@@ -1,36 +1,37 @@
-# /Users/ven/dotfiles/nix/shared/aliases-shared.nix
-#
-# SHARED: PATH ALIASES
-# Provides fallback-safe merging of Darwin and Linux aliases.
-# Ensures missing OS aliases never cause module evaluation errors.
+# SHARED: ALIASES
+# Cross-platform path helpers.
+# Consumes Darwin + Linux home aliases WITHOUT REQUIRING BOTH.
 # ============================================================
 
-{ lib, aliasesDarwin ? {}, aliasesLinux ? {}, ... }:
+{ aliasesDarwin ? {}, aliasesLinux ? {}, ... }:
 
 let
-  # Select OS-specific home safely without evaluating missing attributes.
+  # ---- OS-specific home paths ----
   osHome =
-    if aliasesDarwin ? home then aliasesDarwin.home
-    else if aliasesLinux ? home then aliasesLinux.home
-    else "/home/ven";   # final fallback so Nix never dies
+    if aliasesDarwin?mHome then aliasesDarwin.mHome
+    else if aliasesLinux?nHome then aliasesLinux.nHome
+    else "/UNKNOWN-HOME";
 in
 {
-  _module.args.aliasesShared =
+	# Merge Darwin + Linux aliases
+  _module.args.aliasesShared = {
+    home = osHome;
+    
+    # --- Portable directores ---
+    configDir = "${osHome}/.config";
+    cacheDir  = "${osHome}/.cache";
+    dataDir   = "${osHome}/.local/share";
 
-    # Merge Darwin + Linux aliases (whichever exist)
-    aliasesDarwin // aliasesLinux // {
-
-      # --- Portable directores ---
-      home      = osHome;
-      configDir = "${osHome}/.config";
-      cacheDir  = "${osHome}/.cache";
-      dataDir   = "${osHome}/.local/share";
-
-      # --- App install root ---
-      appsRoot =
-        if aliasesDarwin ? applicationsRoot then aliasesDarwin.applicationsRoot
-        else if aliasesLinux ? applicationsRoot then aliasesLinux.applicationsRoot
-        else "/Applications";
-
-    };
+    # ---- dotfiles ----
+    dotfiles =
+      aliasesDarwin.dotfiles or
+      aliasesLinux.dotfiles or
+      "${osHome}/dotfiles";
+      
+    # --- App install root ---
+    appsRoot =
+      aliasesDarwin.applicationsRoot or
+      aliasesLinux.applicationsRoot or
+      "/Applications";
+  };
 }

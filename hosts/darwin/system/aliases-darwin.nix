@@ -1,12 +1,16 @@
 # /Users/ven/dotfiles/nix/hosts/darwin/system/aliases-darwin.nix
 #
 # DARWIN: PATH ALIASES
+# ------------------------------------------------------------
 # Core path aliases for macOS:
-#   - Home, Library, dotfiles, iCloud.
-#   - Application folders, Docker paths.
-#   - LaunchAgents, temp and misc paths.
-# Exposed as _module.args.aliasesDarwin for shared consumption.
-# ============================================================
+#   - Home, Library, dotfiles, iCloud
+#   - Applications (system + programming)
+#   - Docker Desktop directories
+#   - LaunchAgents, temp, caches, prefs
+#
+# Exposed under _module.args.aliasesDarwin.
+# Shared alias module merges these with Linux equivalents.
+# ------------------------------------------------------------
 
 { ... }:
 
@@ -28,7 +32,7 @@ in
 {
   _module.args.aliasesDarwin = {
 
-    # ---- Base paths ----
+    # ---- Base directories ----
     home    = home;
     library = library;
 
@@ -38,10 +42,13 @@ in
     caches     = "${library}/Caches";
     logs       = "${library}/Logs";
 
+    # ---- Homebrew ----
     brewPrefix = "/opt/homebrew";
-    temp       = "/tmp";
 
-    # ---- Dotfiles & iCloud ----
+    # ---- Temporary ----
+    temp = "/tmp";
+
+    # ---- Dotfiles + iCloud ----
     dotfiles = dotfiles;
     iCloud   = iCloud;
 
