@@ -92,7 +92,7 @@
 
             # ---- Darwin: Home directory ----
             # System-level home directory for the primary user.
-            users.users.ven.home = aliasesShared.home;
+            users.users.ven.home = "/Users/ven";
 
             # ---- System state version ----
             # Required by nix-darwin.
@@ -182,7 +182,7 @@
             # HM identity and base config.
             users.ven = {
               home.username      = "ven";
-              home.homeDirectory = aliasesShared.home;
+              home.homeDirectory = "/Users/ven";
               home.stateVersion  = "25.11";
 
               # --- Git CLI ---
@@ -238,7 +238,7 @@
             # HM identity and base config.
             users.ven = {
               home.username      = "ven";
-              home.homeDirectory = aliasesShared.home;
+              home.homeDirectory = "/home/ven";
               home.stateVersion  = "25.11";
 
               # --- Git CLI ---
@@ -287,9 +287,9 @@
             { aliasesShared, pkgs, lib, ... }:
             {
               # Standalone HM identity.
-              home.username      = "ven";
-              home.homeDirectory = aliasesShared.home;
-              home.stateVersion  = "25.11";
+              home.username = "ven";
+              home.homeDirectory = "/Users/ven";
+              home.stateVersion = "25.11";
 
               # --- Git CLI ---
               # Enables Git CLI in Home Manager.
@@ -333,9 +333,9 @@
             { aliasesShared, pkgs, lib, ... }:
             {
               # Standalone HM identity.
-              home.username      = "ven";
-              home.homeDirectory = aliasesShared.home;
-              home.stateVersion  = "25.11";
+              home.username = "ven";
+              home.homeDirectory = "/home/ven";
+              home.stateVersion = "25.11";
 
               # --- Git CLI ---
               # Enables Git CLI in Home Manager.
