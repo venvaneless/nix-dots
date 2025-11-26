@@ -236,7 +236,7 @@
 
             # ---- Linux: HM - User Environment ----
             # HM identity and base config.
-            home-manager.users.ven = {
+            users.ven = {
               home.username      = "ven";
               home.homeDirectory = aliasesShared.home;
               home.stateVersion  = "25.11";
