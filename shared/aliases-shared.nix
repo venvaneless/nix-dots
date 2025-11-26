@@ -20,7 +20,7 @@ in
     
     # --- Portable directores ---
     mHome    = "/Users/ven";
-    home    = "/home/ven";
+    nHome    = "/home/ven";
     configDir = "${osHome}/.config";
     cacheDir  = "${osHome}/.cache";
     dataDir   = "${osHome}/.local/share";
