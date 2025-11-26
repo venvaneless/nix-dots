@@ -102,7 +102,7 @@
 
         extraSpecialArgs = {
           inherit inputs;
-        ];
+        };
 
         modules = [
           ./hosts/linux/hm-out.nix
