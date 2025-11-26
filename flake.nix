@@ -124,6 +124,8 @@
                 trusted-public-keys = [
                   "nix-community.cachix.org-1:JskYNL0Y9RxrK2AQcJQO4gp4fJu7NDZfCFeiyPu7o2w="
                 ];
+              };
+              
 
               # -- System build users. --
               build-users-group = "nixbld";
