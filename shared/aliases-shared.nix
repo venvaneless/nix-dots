@@ -12,6 +12,8 @@ let
     if aliasesDarwin?mHome then aliasesDarwin.mHome
     else if aliasesLinux?nHome then aliasesLinux.nHome
     else "/UNKNOWN-HOME";
+    aliasesDarwin.mHome    = "/Users/ven";
+    aliasesLinux.nHome    = "/home/ven";
 in
 {
 	# Merge Darwin + Linux aliases
@@ -19,8 +21,7 @@ in
     home = osHome;
     
     # --- Portable directores ---
-    aliasesDarwin.mHome    = "/Users/ven";
-    aliasesLinux.nHome    = "/home/ven";
+
     configDir = "${osHome}/.config";
     cacheDir  = "${osHome}/.cache";
     dataDir   = "${osHome}/.local/share";
