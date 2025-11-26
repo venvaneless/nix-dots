@@ -10,10 +10,12 @@
 let
   sp = aliasesShared;
 in
+	brewPrefix = "/opt/homebrew";
+
 {
   environment.systemPath = [
     # ---- Homebrew ----
-    brewPrefix = "/opt/homebrew";
+    
     "${sp.brewPrefix}/bin"
     "${sp.brewPrefix}/sbin"
 
