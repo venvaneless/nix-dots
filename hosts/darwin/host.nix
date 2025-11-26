@@ -1,79 +1,99 @@
 # /Users/ven/dotfiles/nix/hosts/darwin/host.nix
 #
 # DARWIN: HOST CONFIG
-# Glue module for macOS system, Home Manager and strict Nix settings.
-# Holds only:
-#   - Core Nix options required at host level
-#   - Minimal user identity and shell
-#   - All module imports for the Darwin system
+# Main glue module for macOS:
+#   - System identity (user, state version, hostname)
+#   - Core Nix settings
+#   - Shell + defaults
+#   - AFTER THAT: all module imports (HM, system.nix, brew, paths, aliases)
 # ============================================================
 
 { config, pkgs, lib, inputs, home-manager, ... }:
 
 {
   # ------------------------------------------------------------
-  # MODULE IMPORTS
-  # Loads system modules and integrated Home Manager.
-  # ------------------------------------------------------------
-  imports = [
-    # ------ Home Manager engine ------
-    home-manager.darwinModules.home-manager
-
-    # ------ Integrated HM config ------
-    ./hm-in.nix
-
-    # ------ System-level config ------
-    ./system.nix
-  ];
-
-  # ------------------------------------------------------------
   # SYSTEM IDENTITY
-  # Primary user, state version, home directory and hostname.
+  # Must be defined BEFORE imports for darwinSystem.
   # ------------------------------------------------------------
   system.primaryUser = "ven";
   system.stateVersion = lib.mkForce 6;
 
-  users.users.ven.home = "/Users/ven";
+  users.users.ven = {
+    home  = "/Users/ven";
+    shell = pkgs.zsh;
+  };
 
   networking.hostName = "Vens-Macbook";
 
   # ------------------------------------------------------------
   # NIX CORE SETTINGS
-  # Strict system-wide settings needed at host level.
+  # Must also be defined BEFORE loading Home Manager.
   # ------------------------------------------------------------
   nix = {
-
-    # ------ GC behavior ------
     optimise.automatic = true;
 
-    # ------ Core settings ------
     settings = {
-      # ---- CLI features ----
       experimental-features = [ "nix-command" "flakes" ];
 
-      # ---- Substituters ----
       substituters = [
         "https://cache.nixos.org"
         "https://nix-community.cachix.org"
       ];
 
-      # ---- Trusted keys ----
       trusted-public-keys = [
         "nix-community.cachix.org-1:JskYNL0Y9RxrK2AQcJQO4gp4fJu7NDZfCFeiyPu7o2w="
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       ];
 
-      # ---- System build users ----
       build-users-group = "nixbld";
     };
   };
 
   # ------------------------------------------------------------
   # SYSTEM SHELL
-  # System-level zsh enabling and login shell.
   # ------------------------------------------------------------
   programs.zsh.enable = true;
 
-  # --- Login shell for ven ---
-  users.users.ven.shell = pkgs.zsh;
+  # ------------------------------------------------------------
+  # MACOS DEFAULTS
+  # ------------------------------------------------------------
+  system.defaults = {
+    dock = {
+      autohide = true;
+      tilesize = 48;
+    };
+
+    finder = {
+      AppleShowAllExtensions = true;
+      FXPreferredViewStyle   = "Nlsv";
+      NewWindowTarget        = "Home";
+      ShowPathbar            = true;
+    };
+
+    NSGlobalDomain = {
+      AppleShowAllExtensions = true;
+      AppleWindowTabbingMode = "always";
+    };
+
+    alf = {
+      globalstate = 1;
+    };
+  };
+
+  networking.applicationFirewall.enable = true;
+
+  # ------------------------------------------------------------
+  # MODULE IMPORTS
+  # Load all system + HM modules AFTER system identity is known.
+  # ------------------------------------------------------------
+  imports = [
+    # ---- Home Manager engine ----
+    home-manager.darwinModules.home-manager
+
+    # ---- Integrated HM config ----
+    ./hm-in.nix
+
+    # ---- System-level config ----
+    ./system.nix
+  ];
 }
