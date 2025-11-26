@@ -8,6 +8,9 @@
 
 { aliasesDarwin ? {}, aliasesLinux ? {}, ... }:
 
+let 
+	 baseHome = aliasesDarwin.home or aliasesLinux.home or "/nonexistent";
+in
 {
   _module.args.aliasesShared =
     aliasesDarwin // aliasesLinux // {
