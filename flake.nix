@@ -73,7 +73,7 @@
         # ---- Inline system + HM core ----
         { lib, aliasesShared, inputs, pkgs, ... }:
         let
-          nh = inputs.nix-homebrew or {};
+        	nh = if nix-homebrew != {} then nix-homebrew else (inputs.nix-homebrew or {});
         in
         {
           # ------------------------------------------------------
