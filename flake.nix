@@ -221,6 +221,7 @@
       modules = [
         # ---- Shared Aliases ----
         # Reuses aliasesShared when Linux aliases exist.
+        ./hosts/linux/system/aliases-linux.nix
         ./shared/aliases-shared.nix
 
         # ---- Linux HM Engine ----

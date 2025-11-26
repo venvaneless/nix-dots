@@ -2,14 +2,10 @@
 #
 # LINUX: PATH ALIASES
 # ------------------------------------------------------------
-# Minimal Linux alias set.
-# Only provides Linux-native paths:
-#   - Home, dotfiles, config/cache/data dirs
-#   - Containers, backups
-#   - Linux-specific Applications folder
-#
-# This file is only imported by Linux configs.
-# Darwin never touches it.
+# Core path aliases for NixOS / Linux:
+#   - Home, XDG directories
+#   - Dotfiles, containers, backups
+#   - User-level Applications root
 #
 # Exposed under _module.args.aliasesLinux.
 # Shared alias module merges these with Darwin equivalents.
@@ -23,8 +19,8 @@ in
 {
   _module.args.aliasesLinux = {
 
-    # ---- Base directories ----
-    nhome      = home;
+    # ---- Core directories ----
+    home      = home;
     configDir = "${home}/.config";
     cacheDir  = "${home}/.cache";
     dataDir   = "${home}/.local/share";
@@ -32,11 +28,11 @@ in
     # ---- Dotfiles ----
     dotfiles = "${home}/dotfiles";
 
-    # ---- Containers + backups ----
+    # ---- Containers / backups (future-safe) ----
     containers = "${home}/containers";
     backups    = "${home}/backups";
 
-    # ---- Applications root (Linux-style) ----
+    # ---- Applications root (Linux variant) ----
     applicationsRoot = "${home}/Applications";
   };
 }

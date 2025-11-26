@@ -1,37 +1,40 @@
 # /Users/ven/dotfiles/nix/hosts/darwin/system/paths-darwin.nix
 #
 # DARWIN: SYSTEM PATHS
-# Adds system-wide PATH entries based on aliasesShared.
-# This module is Darwin-only and used by nix-darwin.
-# ============================================================
+# ------------------------------------------------------------
+# Extends environment.systemPath using aliasesShared:
+#   - Homebrew bin/sbin
+#   - Standard macOS /usr/local paths
+#   - Docker Desktop binaries
+#   - Zed CLI
+#   - Nix profile binaries
+#
+# Consumed only on Darwin, never on Linux.
+# ------------------------------------------------------------
 
 { aliasesShared, lib, pkgs, ... }:
 
 let
-	brewPrefix = "/opt/homebrew";
-	
   sp = aliasesShared;
-
 in
 {
-
   environment.systemPath = [
     # ---- Homebrew ----
     "${sp.brewPrefix}/bin"
     "${sp.brewPrefix}/sbin"
 
-    # ---- System bin ----
+    # ---- Standard macOS paths ----
     "/usr/local/bin"
     "/usr/local/sbin"
 
-    # ---- Docker CLI ----
+    # ---- Docker Desktop paths ----
     sp.dockerBin
     sp.dockerPluginsDir
 
-    # ---- ZED CLI ----
+    # ---- Zed CLI ----
     "${sp.applicationsProgramming}/Zed.app/Contents/MacOS"
 
-    # ---- NIX PROFILES ----
+    # ---- Nix profiles ----
     "/nix/var/nix/profiles/default/bin"
   ];
 }
