@@ -33,7 +33,7 @@ in
   _module.args.aliasesDarwin = {
 
     # ---- Base directories ----
-    home    = home;
+    mhome    = home;
     library = library;
 
     appSupport = "${library}/Application Support";

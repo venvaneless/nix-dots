@@ -24,7 +24,7 @@ in
   _module.args.aliasesLinux = {
 
     # ---- Base directories ----
-    home      = home;
+    nhome      = home;
     configDir = "${home}/.config";
     cacheDir  = "${home}/.cache";
     dataDir   = "${home}/.local/share";
