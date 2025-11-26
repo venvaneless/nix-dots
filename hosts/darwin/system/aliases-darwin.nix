@@ -17,7 +17,6 @@
 let
   home    = "/Users/ven";
   library = "${home}/Library";
-  brewPrefix = "/opt/homebrew";
 
   applicationsRoot        = "/Applications";
   applicationsProgramming = "${applicationsRoot}/Programming";
