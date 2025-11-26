@@ -3,7 +3,8 @@
 # Consumes Darwin + Linux home aliases WITHOUT REQUIRING BOTH.
 # ============================================================
 
-{ aliasesDarwin ? {}, aliasesLinux ? {}, ... }:
+{ config, lib, ... }:
+
 
 let
   # ---- OS-specific home paths ----
