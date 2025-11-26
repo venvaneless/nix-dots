@@ -1,10 +1,8 @@
 # /Users/ven/dotfiles/nix/hosts/linux/system/aliases-linux.nix
 #
 # LINUX: ALIASES
-# Provides:
-#   - Basic alias structure for Linux.
-#   - Ensures shared alias module never breaks.
-#   - Adds core paths: home, dotfiles, config, cache, data.
+# Provides Linux-specific path aliases.
+# Ensures shared alias logic always has valid values.
 # ============================================================
 
 { ... }:
@@ -24,11 +22,11 @@ in
     # --- Dotfiles ----
     dotfiles   = "${home}/dotfiles";
 
-    # --- Applications root (Linux equivalent) ---
-    applicationsRoot = "${home}/Applications";  # you can rename later
-
-    # --- Containers, backups (future-safe) ---
+    # --- Containers / backups (future-safe) ---
     containers = "${home}/containers";
     backups    = "${home}/backups";
+
+    # --- Applications root (Linux variant) ---
+    applicationsRoot = "${home}/Applications";
   };
 }

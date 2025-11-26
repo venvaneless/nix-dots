@@ -8,21 +8,16 @@
 
 { aliasesDarwin ? {}, aliasesLinux ? {}, ... }:
 
-let 
-	 baseHome = aliasesDarwin.home or aliasesLinux.home or "/nonexistent";
-in
-{
+let
+  baseHome = aliasesDarwin.home or aliasesLinux.home or "/nonexistent";
+in {
   _module.args.aliasesShared =
     aliasesDarwin // aliasesLinux // {
-      # Extra portable dirs
-      configDir = "${(aliasesDarwin.home or aliasesLinux.home)}/.config";
-      cacheDir  = "${(aliasesDarwin.home or aliasesLinux.home)}/.cache";
-      dataDir   = "${(aliasesDarwin.home or aliasesLinux.home)}/.local/share";
-
-      # App root for casks (derives from platform aliases if present)
-      appsRoot =
-        aliasesDarwin.applicationsRoot or
-        aliasesLinux.applicationsRoot or
-        "/Applications";
+      configDir = "${baseHome}/.config";
+      cacheDir  = "${baseHome}/.cache";
+      dataDir   = "${baseHome}/.local/share";
+      appsRoot  = aliasesDarwin.applicationsRoot
+                  or aliasesLinux.applicationsRoot
+                  or "/Applications";
     };
 }
