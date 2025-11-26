@@ -19,6 +19,8 @@ in
     home = osHome;
     
     # --- Portable directores ---
+    mHome    = "/Users/ven";
+    home    = "/home/ven";
     configDir = "${osHome}/.config";
     cacheDir  = "${osHome}/.cache";
     dataDir   = "${osHome}/.local/share";
