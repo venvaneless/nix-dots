@@ -12,7 +12,15 @@
 {
   description = "Ven’s setup";
 
-  nixConfig.allow-dirty = true;
+  nixConfig = {
+    extra-substituters = [
+      "https://nix-community.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "nix-community.cachix.org-1:JskYNL0Y9RxrK2AQcJQO4gp4fJu7NDZfCFeiyPu7o2w="
+    ];
+    allow-dirty = true;
+  };
 
   # ============================================================
   # INPUTS
