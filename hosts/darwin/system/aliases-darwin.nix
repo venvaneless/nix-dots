@@ -15,7 +15,7 @@
 { ... }:
 
 let
-  home    = "/Users/ven";
+  Home    = "/Users/ven";
   library = "${home}/Library";
 
   applicationsRoot        = "/Applications";
@@ -33,7 +33,7 @@ in
   _module.args.aliasesDarwin = {
 
     # ---- Base directories ----
-    mhome    = home;
+    home    = home;
     library = library;
 
     appSupport = "${library}/Application Support";
