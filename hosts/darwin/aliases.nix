@@ -1,16 +1,13 @@
-# /Users/ven/dotfiles/nix/hosts/darwin/system/aliases-darwin.nix
+# /Users/ven/dotfiles/nix/hosts/darwin/aliases.nix
 #
 # DARWIN: PATH ALIASES
-# ------------------------------------------------------------
 # Core path aliases for macOS:
 #   - Home, Library, dotfiles, iCloud
 #   - Applications (system + programming)
 #   - Docker Desktop directories
 #   - LaunchAgents, temp, caches, prefs
-#
-# Exposed under _module.args.aliasesDarwin.
-# Shared alias module merges these with Linux equivalents.
-# ------------------------------------------------------------
+#   - XDG-style config, cache and data dirs
+# ============================================================
 
 { ... }:
 
@@ -30,9 +27,13 @@ let
   dockerPluginsDir = "${dockerResources}/cli-plugins";
 in
 {
+  # ------------------------------------------------------------
+  # DARWIN ALIASES
+  # Exported as aliasesDarwin for shared consumption.
+  # ------------------------------------------------------------
   _module.args.aliasesDarwin = {
 
-    # ---- Base directories ----
+    # ------ Base directories ------
     home    = home;
     library = library;
 
@@ -42,13 +43,22 @@ in
     caches     = "${library}/Caches";
     logs       = "${library}/Logs";
 
-    # ---- Homebrew ----
+    # ------ XDG-style dirs ------
+    xdgConfig = "${home}/.config";
+    xdgCache  = "${home}/.cache";
+    xdgData   = "${home}/.local/share";
+
+    # ------ User bins ------
+    binUser  = "${home}/bin";
+    localBin = "${home}/.local/bin";
+
+    # ------ Homebrew prefix ------
     brewPrefix = "/opt/homebrew";
 
-    # ---- Temporary ----
+    # ------ Temporary ------
     temp = "/tmp";
 
-    # ---- Dotfiles + iCloud ----
+    # ------ Dotfiles + iCloud ------
     dotfiles = dotfiles;
     iCloud   = iCloud;
 
@@ -56,15 +66,15 @@ in
     ssl        = "${dotfiles}/ssl";
     containers = "${dotfiles}/containers";
 
-    # ---- Launch agents ----
+    # ------ Launch agents ------
     launchAgentsUser   = "${library}/LaunchAgents";
     launchAgentsGlobal = "/Library/LaunchAgents";
 
-    # ---- Applications ----
+    # ------ Applications ------
     applicationsRoot        = applicationsRoot;
     applicationsProgramming = applicationsProgramming;
 
-    # ---- Docker Desktop ----
+    # ------ Docker Desktop ------
     dockerApp        = dockerApp;
     dockerResources  = dockerResources;
     dockerBin        = dockerBin;
