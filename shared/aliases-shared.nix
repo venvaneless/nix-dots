@@ -1,23 +1,36 @@
 # /Users/ven/dotfiles/nix/shared/aliases-shared.nix
 #
 # SHARED: PATH ALIASES
-# Aggregates platform-specific alias maps (Darwin + Linux)
-# into a shared aliasesShared set.
-# Requires either aliasesDarwin.home or aliasesLinux.home.
+# Provides fallback-safe merging of Darwin and Linux aliases.
+# Ensures missing OS aliases never cause module evaluation errors.
 # ============================================================
 
-{ aliasesDarwin ? {}, aliasesLinux ? {}, ... }:
+{ lib, aliasesDarwin ? {}, aliasesLinux ? {}, ... }:
 
 let
-  baseHome = aliasesDarwin.home or aliasesLinux.home or "/nonexistent";
-in {
+  # Select OS-specific home safely without evaluating missing attributes.
+  osHome =
+    if aliasesDarwin ? home then aliasesDarwin.home
+    else if aliasesLinux ? home then aliasesLinux.home
+    else "/home/ven";   # final fallback so Nix never dies
+in
+{
   _module.args.aliasesShared =
+
+    # Merge Darwin + Linux aliases (whichever exist)
     aliasesDarwin // aliasesLinux // {
-      configDir = "${baseHome}/.config";
-      cacheDir  = "${baseHome}/.cache";
-      dataDir   = "${baseHome}/.local/share";
-      appsRoot  = aliasesDarwin.applicationsRoot
-                  or aliasesLinux.applicationsRoot
-                  or "/Applications";
+
+      # --- Portable directores ---
+      home      = osHome;
+      configDir = "${osHome}/.config";
+      cacheDir  = "${osHome}/.cache";
+      dataDir   = "${osHome}/.local/share";
+
+      # --- App install root ---
+      appsRoot =
+        if aliasesDarwin ? applicationsRoot then aliasesDarwin.applicationsRoot
+        else if aliasesLinux ? applicationsRoot then aliasesLinux.applicationsRoot
+        else "/Applications";
+
     };
 }
