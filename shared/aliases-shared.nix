@@ -19,8 +19,8 @@ in
     home = osHome;
     
     # --- Portable directores ---
-    mHome    = "/Users/ven";
-    nHome    = "/home/ven";
+    aliasesDarwin.mHome    = "/Users/ven";
+    aliasesLinux.nHome    = "/home/ven";
     configDir = "${osHome}/.config";
     cacheDir  = "${osHome}/.cache";
     dataDir   = "${osHome}/.local/share";
