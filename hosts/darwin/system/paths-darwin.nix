@@ -8,15 +8,15 @@
 { aliasesShared, lib, pkgs, ... }:
 
 let
-  sp = aliasesShared;
-in
-
-{
 	brewPrefix = "/opt/homebrew";
-		
+	
+  sp = aliasesShared;
+
+in
+{
+
   environment.systemPath = [
     # ---- Homebrew ----
-    
     "${sp.brewPrefix}/bin"
     "${sp.brewPrefix}/sbin"
 
