@@ -180,7 +180,7 @@
 
             # ---- Darwin: HM - User Environment ----
             # HM identity and base config.
-            users.ven = {
+            home-manager.users.ven = {
               home.username      = "ven";
               home.homeDirectory = "/Users/ven";
               home.stateVersion  = "25.11";
@@ -236,7 +236,7 @@
 
             # ---- Linux: HM - User Environment ----
             # HM identity and base config.
-            users.ven = {
+            home-manager.users.ven = {
               home.username      = "ven";
               home.homeDirectory = "/home/ven";
               home.stateVersion  = "25.11";
