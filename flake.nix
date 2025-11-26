@@ -195,7 +195,7 @@
 
               # ---- Extra HM modules ----
               imports = [
-              	./hosts/darwin/aliases-darwin.nix
+              	./hosts/darwin/system/aliases-darwin.nix
                ./shared/aliases-shared.nix
                ./shared/shared-home.nix
               ];
