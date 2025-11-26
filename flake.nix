@@ -71,9 +71,9 @@
         ./hosts/darwin/system/homebrew.nix
 
         # ---- Inline system + HM core ----
-        { lib, aliasesShared, inputs, pkgs, ... }:
-        let
-        	nh = if nix-homebrew != {} then nix-homebrew else (inputs.nix-homebrew or {});
+        { lib, aliasesShared, inputs, pkgs, nix-homebrew, ... }:
+          let
+            nh = if nix-homebrew != {} then nix-homebrew else (inputs.nix-homebrew or {});;
         in
         {
           # ------------------------------------------------------
