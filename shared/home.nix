@@ -1,12 +1,10 @@
 # /Users/ven/dotfiles/nix/shared/home.nix
 #
-# SHARED: USER HOME SETTINGS
-# Provides shared user-level configuration for Home Manager:
-#   - session variables
-#   - user environment overrides
-# Does NOT include Home Manager engine integration.
+# SHARED: HOME MANAGER SETTINGS
+# Common user-level configuration shared by all HM configs:
+#   - Enable Home Manager program
+#   - Shared environment variables
 # ============================================================
-
 
 { config, pkgs, ... }:
 

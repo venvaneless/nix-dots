@@ -11,14 +11,6 @@
 
 {
   # ------------------------------------------------------------
-  # MODULE IMPORTS
-  # Shared user-level Home Manager configuration.
-  # ------------------------------------------------------------
-  imports = [
-    ../../shared/home.nix
-  ];
-
-  # ------------------------------------------------------------
   # HOME MANAGER CORE
   # Use system packages and per-user packages.
   # ------------------------------------------------------------
@@ -33,5 +25,10 @@
     home.username      = "ven";
     home.homeDirectory = "/home/ven";
     home.stateVersion  = "25.11";
+
+    # ------ Shared HM settings ------
+    imports = [
+      ../../shared/home.nix
+    ];
   };
 }
