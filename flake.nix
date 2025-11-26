@@ -31,7 +31,10 @@
   # ============================================================
   outputs = inputs@{ self, nixpkgs, darwin, home-manager, nix-homebrew, ... }:
   let
+    # Darwin pkgs (for standalone HM)
     pkgsDarwin = import nixpkgs { system = "aarch64-darwin"; };
+
+    # Linux pkgs (for standalone HM)
     pkgsLinux  = import nixpkgs { system = "x86_64-linux"; };
   in
   {
@@ -43,8 +46,9 @@
     darwinConfigurations.macbook = darwin.lib.darwinSystem {
       system = "aarch64-darwin";
 
+      # Pass inputs and home-manager into all Darwin modules
       specialArgs = {
-        inherit inputs home-manager;
+        inherit inputs home-manager nix-homebrew;
       };
 
       modules = [
@@ -71,140 +75,147 @@
         ./hosts/darwin/system/homebrew.nix
 
         # ---- Inline system + HM core ----
-        { lib, aliasesShared, inputs, pkgs, nix-homebrew, ... }:
+        (
+          { lib, aliasesShared, inputs, pkgs, nix-homebrew, ... }:
           let
-            nh = if nix-homebrew != {} then nix-homebrew else (inputs.nix-homebrew or {});;
-        in
-        {
-          # ------------------------------------------------------
-          # DARWIN: USER + SYSTEM ENVIRONMENT
-          # ------------------------------------------------------
+            # Short alias to nix-homebrew input
+            nh = inputs.nix-homebrew;
+          in
+          {
+            # ------------------------------------------------------
+            # DARWIN: USER + SYSTEM ENVIRONMENT
+            # ------------------------------------------------------
 
-          # ---- Darwin: Primary User ----
-          # macOS user must already exist on the system.
-          system.primaryUser = "ven";
+            # ---- Darwin: Primary User ----
+            # macOS user must already exist on the system.
+            system.primaryUser = "ven";
 
-          # ---- Darwin: Home directory ----
-          # System-level home directory for the primary user.
-          users.users.ven.home = aliasesShared.home;
+            # ---- Darwin: Home directory ----
+            # System-level home directory for the primary user.
+            users.users.ven.home = aliasesShared.home;
 
-          # ---- System state version ----
-          # Required by nix-darwin.
-          # Pinning the Darwin release version.
-          system.stateVersion = lib.mkForce 6;
+            # ---- System state version ----
+            # Required by nix-darwin.
+            # Pinning the Darwin release version.
+            system.stateVersion = lib.mkForce 6;
 
-          # ------------------------------------------------------
-          # DARWIN: NIX CORE SETTINGS
-          # ------------------------------------------------------
+            # ------------------------------------------------------
+            # DARWIN: NIX CORE SETTINGS
+            # ------------------------------------------------------
 
-          # ---- Nix GC ----
-          # Runs nix-store --optimise periodically.
-          nix.optimise.automatic = true;
+            # ---- Nix GC ----
+            # Runs nix-store --optimise periodically.
+            nix.optimise.automatic = true;
 
-          # ---- Nix settings ----
-          # Global flake + nix-command + binary caches.
-          nix.settings = {
-            # Global nix-command + flakes.
-            experimental-features = [ "nix-command" "flakes" ];
+            # ---- Nix settings ----
+            # Global flake + nix-command + binary caches.
+            nix.settings = {
+              # Global nix-command + flakes.
+              experimental-features = [ "nix-command" "flakes" ];
 
-             # ---Substituters and cache
-            substituters = [
-              "https://cache.nixos.org"
-              "https://nix-community.cachix.org"
+              # --- Substituters and cache ---
+              substituters = [
+                "https://cache.nixos.org"
+                "https://nix-community.cachix.org"
+              ];
+
+              # -- Signing keys. --
+              trusted-public-keys = [
+                "nix-community.cachix.org-1:…"
+              ];
+
+              # -- System build users. --
+              build-users-group = "nixbld";
+            };
+
+            # ------------------------------------------------------
+            # DARWIN: SYSTEM ENVIRONMENT
+            # ------------------------------------------------------
+
+            # ---- Shell ----
+            # Sets zsh as the system shell.
+            programs.zsh.enable = true;
+
+            # ---- Hostname ----
+            # Used for networking and scutil.
+            networking.hostName = "Vens-Macbook";
+
+            # ---- Global PATH addition ----
+            # Injects the nix binary path into system environment paths.
+            # Darwin-only, uses the nix package derivation.
+            environment.systemPath = [
+              pkgs.nix
             ];
 
-            # --Signing keys.
-            trusted-public-keys = [ "nix-community.cachix.org-1:…" ];
+            # ------------------------------------------------------
+            # DARWIN: NIX-HOMEBREW
+            # ------------------------------------------------------
 
-            # --System build users.
-            build-users-group = "nixbld";
-          };
+            # Import nix-homebrew module for Darwin.
+            imports = [ nh.darwinModules.nix-homebrew ];
 
-          # ------------------------------------------------------
-          # DARWIN: SYSTEM ENVIRONMENT
-          # ------------------------------------------------------
-
-          # ---- Shell ----
-          # Sets zsh as the system shell.
-          programs.zsh.enable = true;
-
-          # ---- Hostname ----
-          # Used for networking and scutil.
-          networking.hostName = "Vens-Macbook";
-
-          # ---- Global PATH addition ----
-          # Injects the nix binary path into system environment paths.
-          # Darwin-only, uses the nix package derivation.
-          environment.systemPath = [
-            pkgs.nix
-          ];
-
-          # ------------------------------------------------------
-          # DARWIN: NIX-HOMEBREW
-          # ------------------------------------------------------
-          imports = [ nh.darwinModules.nix-homebrew ];
-
-          # ---- Nix-Homebrew: Core Settings ----
-          # System-level Homebrew management via nix-homebrew.
-          nix-homebrew = {
-            enable        = true;
-            user          = "ven";
-            enableRosetta = false;
-            autoMigrate   = true;
+            # ---- Nix-Homebrew: Core Settings ----
+            # System-level Homebrew management via nix-homebrew.
+            nix-homebrew = {
+              enable        = true;
+              user          = "ven";
+              enableRosetta = false;
+              autoMigrate   = true;
+            };
 
             # ---- Homebrew: Variables ----
-            # --Updating
-            global.autoUpdate     = true;
-            # --Activation
-            onActivation.cleanup  = "uninstall";
-          };
+            # Values like global.autoUpdate / onActivation.cleanup
+            # are configured in:
+            #   hosts/darwin/system/homebrew.nix
 
-          # ------------------------------------------------------
-          # DARWIN: INTEGRATED HOME MANAGER
-          # Darwin configuration with embedded Home Manager
-          # ------------------------------------------------------
+            # ------------------------------------------------------
+            # DARWIN: INTEGRATED HOME MANAGER
+            # Darwin configuration with embedded Home Manager.
+            # ------------------------------------------------------
 
-          # ---- Darwin: HM - Core Settings ----
-          # Use system pkgs and per-user packages.
-          home-manager.useGlobalPkgs   = true;
-          home-manager.useUserPackages = true;
+            # ---- Darwin: HM - Core Settings ----
+            # Use system pkgs and per-user packages.
+            home-manager.useGlobalPkgs   = true;
+            home-manager.useUserPackages = true;
 
-         # ---- Darwin: HM - User Environment ----
-          # HM identity and base config
-          home-manager.users.ven = {
-            home.username      = "ven";
-            home.homeDirectory = aliasesShared.home;
-            home.stateVersion  = "25.11";
+            # ---- Darwin: HM - User Environment ----
+            # HM identity and base config.
+            home-manager.users.ven = {
+              home.username      = "ven";
+              home.homeDirectory = aliasesShared.home;
+              home.stateVersion  = "25.11";
 
-             # ---Git CLI
-            Enables Git CLI in HM
-            programs.git.enable = true;
+              # --- Git CLI ---
+              # Enables Git CLI in Home Manager.
+              programs.git.enable = true;
 
-            # ---SSH
-            # Enables SSH in HM
-            programs.ssh.enable = true;
+              # --- SSH ---
+              # Enables SSH in Home Manager.
+              programs.ssh.enable = true;
 
-             # ---- Extra HM modules ----
-            imports = [
-              ./shared/shared-home.nix
-            ];
-          };
-        }
+              # ---- Extra HM modules ----
+              imports = [
+                ./shared/shared-home.nix
+              ];
+            };
+          }
+        )
       ];
     };
 
     # ------------------------------------------------------------
     # LINUX: INTEGRATED HOME MANAGER
-    # NixOS configuration with embedded Home Manager
+    # NixOS configuration with embedded Home Manager.
     # ------------------------------------------------------------
     nixosConfigurations.linux = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
 
+      # Pass inputs + home-manager to NixOS modules.
       specialArgs = {
         inherit inputs home-manager;
       };
 
-       # ---- Integrated HM: Modules ----
+      # ---- Integrated HM: Modules ----
       modules = [
         # ---- Shared Aliases ----
         # Reuses aliasesShared when Linux aliases exist.
@@ -214,31 +225,35 @@
         home-manager.nixosModules.home-manager
 
         # ---- Linux: HM - Core Settings ----
-        { aliasesShared, ... }: {
-        	# Use system pkgs and per-user packages.
-          home-manager.useGlobalPkgs   = true;
-          home-manager.useUserPackages = true;
+        (
+          { aliasesShared, ... }:
+          {
+            # Use system pkgs and per-user packages.
+            home-manager.useGlobalPkgs   = true;
+            home-manager.useUserPackages = true;
 
-          # ---- Linux: HM - User Environment ----
-          # HM identity and base config
-          home-manager.users.ven = {
-            home.username      = "ven";
-            home.homeDirectory = aliasesShared.home;
-            home.stateVersion  = "25.11";
-            
-            # ---Git CLI
-            Enables Git CLI in HM
-            programs.git.enable = true;
+            # ---- Linux: HM - User Environment ----
+            # HM identity and base config.
+            home-manager.users.ven = {
+              home.username      = "ven";
+              home.homeDirectory = aliasesShared.home;
+              home.stateVersion  = "25.11";
 
-            # ---SSH
-            # Enables SSH in HM
-            programs.ssh.enable = true;
+              # --- Git CLI ---
+              # Enables Git CLI in Home Manager.
+              programs.git.enable = true;
 
-            imports = [
-              ./shared/shared-home.nix
-            ];
-          };
-        }
+              # --- SSH ---
+              # Enables SSH in Home Manager.
+              programs.ssh.enable = true;
+
+              # Extra shared HM modules.
+              imports = [
+                ./shared/shared-home.nix
+              ];
+            };
+          }
+        )
       ];
     };
 
@@ -252,35 +267,42 @@
       ven-darwin = home-manager.lib.homeManagerConfiguration {
         pkgs = pkgsDarwin;
 
+        # Extra args for all Darwin HM modules.
         extraSpecialArgs = {
-          inherit inputs home-manager;
+          inherit inputs home-manager nix-homebrew;
         };
 
         # ---- Darwin: Standalone HM - Modules ----
         modules = [
+          # Aliases and paths for Darwin user-level HM.
           ./hosts/darwin/system/aliases-darwin.nix
           ./shared/aliases-shared.nix
 
           # ---- Darwin: Core HM User ----
-          { aliasesShared, pkgs, lib, ... }: {
-            home.username      = "ven";
-            home.homeDirectory = aliasesShared.home;
-            home.stateVersion  = "25.11";
-            
-             # ---Git CLI
-            Enables Git CLI in HM
-            programs.git.enable = true;
+          (
+            { aliasesShared, pkgs, lib, ... }:
+            {
+              # Standalone HM identity.
+              home.username      = "ven";
+              home.homeDirectory = aliasesShared.home;
+              home.stateVersion  = "25.11";
 
-            # ---SSH
-            # Enables SSH in HM
-            programs.ssh.enable = true;
+              # --- Git CLI ---
+              # Enables Git CLI in Home Manager.
+              programs.git.enable = true;
 
-            # Darwin-only PATH injection for HM session.
-            home.sessionPath = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin [
-              "${pkgs.nix}/bin"
-            ];
-          }
+              # --- SSH ---
+              # Enables SSH in Home Manager.
+              programs.ssh.enable = true;
 
+              # Darwin-only PATH injection for HM session.
+              home.sessionPath = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin [
+                "${pkgs.nix}/bin"
+              ];
+            }
+          )
+
+          # Additional shared HM config (if needed later).
           ./shared/shared-home.nix
         ];
       };
@@ -289,34 +311,41 @@
       ven-linux = home-manager.lib.homeManagerConfiguration {
         pkgs = pkgsLinux;
 
+        # Extra args for all Linux HM modules.
         extraSpecialArgs = {
           inherit inputs home-manager;
         };
 
         # ---- Linux: Standalone HM - Modules ----
         modules = [
+          # Shared aliases for Linux HM.
           ./shared/aliases-shared.nix
 
           # ---- Linux: Core HM User ----
-          { aliasesShared, pkgs, lib, ... }: {
-            home.username      = "ven";
-            home.homeDirectory = aliasesShared.home;
-            home.stateVersion  = "25.11";
+          (
+            { aliasesShared, pkgs, lib, ... }:
+            {
+              # Standalone HM identity.
+              home.username      = "ven";
+              home.homeDirectory = aliasesShared.home;
+              home.stateVersion  = "25.11";
 
-            # ---Git CLI
-            Enables Git CLI in HM
-            programs.git.enable = true;
+              # --- Git CLI ---
+              # Enables Git CLI in Home Manager.
+              programs.git.enable = true;
 
-            # ---SSH
-            # Enables SSH in HM
-            programs.ssh.enable = true;
+              # --- SSH ---
+              # Enables SSH in Home Manager.
+              programs.ssh.enable = true;
 
-            # Darwin-only PATH injection (no-op on Linux).
-            home.sessionPath = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin [
-              "${pkgs.nix}/bin"
-            ];
-          }
-          	# ---- Linux: Standalone HM - Modules ----
+              # Darwin-only PATH injection (no-op on Linux).
+              home.sessionPath = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin [
+                "${pkgs.nix}/bin"
+              ];
+            }
+          )
+
+          # Additional shared HM config (if needed later).
           ./shared/shared-home.nix
         ];
       };
