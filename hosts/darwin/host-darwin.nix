@@ -1,61 +1,68 @@
 # /Users/ven/dotfiles/nix/hosts/darwin/host-darwin.nix
-{ config, pkgs, lib, inputs, pathsDarwin, pathsShared, ... }:
+#
+# DARWIN: SYSTEM SETTINGS
+# macOS-only system configuration:
+#   - Dock, Finder and Trackpad preferences.
+#   - Networking, fonts, and core system packages.
+#   - No user-level HM config here.
+# ============================================================
+
+{ config, pkgs, lib, inputs, ... }:
 
 {
   # ------------------------------------------------------------
-  # SYSTEM USER + STATE VERSION
+  # DOCK SETTINGS
   # ------------------------------------------------------------
-  system.primaryUser  = "ven";
-  system.stateVersion = lib.mkForce 6;
-
-  # Darwin user must exist on macOS already
-  users.users.ven.home = "/Users/ven";
-
-  # ------------------------------------------------------------
-  # CORE NIX SETTINGS
-  # ------------------------------------------------------------
-  nix.optimise.automatic = true;
-
-  nix.settings = {
-    experimental-features = [ "nix-command" "flakes" ];
-
-    substituters = [
-      "https://cache.nixos.org"
-      "https://nix-community.cachix.org"
-    ];
-    trusted-public-keys = [
-      "nix-community.cachix.org-1:…"
-    ];
-
-    build-users-group = "nixbld";
+  system.defaults.dock = {
+    autohide     = true;
+    show-recents = true;
+    tilesize     = 65;
   };
 
   # ------------------------------------------------------------
-  # TOP-LEVEL MODULE IMPORTS
+  # FINDER SETTINGS
   # ------------------------------------------------------------
-  imports = [
-    # Integrated Home Manager
-    inputs.home-manager.darwinModules.home-manager
+  system.defaults.finder = {
+    AppleShowAllExtensions = true;
+    ShowPathbar            = true;
+    ShowStatusBar          = true;
+  };
 
-    # Path alias injection (Darwin + shared)
-    ./system/paths-darwin.nix
-    ../../shared/paths-shared.nix
+  # ------------------------------------------------------------
+  # TRACKPAD SETTINGS
+  # ------------------------------------------------------------
+  system.defaults.trackpad = {
+    Clicking                     = true;
+    TrackpadRightClick           = false;
+    TrackpadCornerSecondaryClick = 2;
+  };
 
-    # System modules
-    ./system/system.nix
+  # ------------------------------------------------------------
+  # NETWORKING
+  # ------------------------------------------------------------
+  networking.wakeOnLan.enable = false;
+
+  # ------------------------------------------------------------
+  # FONTS
+  # ------------------------------------------------------------
+  fonts.packages = [
+    pkgs.jetbrains-mono
+    pkgs.noto-fonts
   ];
 
   # ------------------------------------------------------------
-  # HOME MANAGER CONFIG (INTEGRATED)
+  # SYSTEM PACKAGES
   # ------------------------------------------------------------
-  home-manager.useGlobalPkgs   = true;
-  home-manager.useUserPackages = true;
+  environment.systemPackages = with pkgs; [
+    inputs.darwin.packages.${pkgs.system}.darwin-rebuild
 
-  home-manager.users.ven = {
-    imports = [
-    	./hosts/darwin/system/paths-darwin.nix
-    ];
+    bashInteractive
+    git-crypt
+    mkcert
+    nssTools
+    nginx
 
-    # If you want extra HM modules per user, add here.
-  };
+    nixd
+    nil
+  ];
 }

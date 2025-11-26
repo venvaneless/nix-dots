@@ -1,63 +1,39 @@
 # /Users/ven/dotfiles/nix/hosts/darwin/system/homebrew.nix
 #
-# HOMEBREW: SYSTEM-LEVEL PACKAGE MANAGER
+# HOMEBREW: DECLARATIVE PACKAGES
 # ============================================================
-# Provides:
-#   - Homebrew bootstrapping via nix-homebrew
-#   - Declarative Brew & Cask installation
-#   - Automatic migration of existing brew setups
-#   - Clean uninstall of removed packages
-#
-# This module is macOS-only and loaded by nix-darwin.
+# Lists brews and casks managed by the nix-darwin Homebrew
+# module. nix-homebrew bootstrap and core config live in
+# flake.nix inline modules.
 # ============================================================
 
-{ config, nix-homebrew, ... }:
+{ aliasesShared, ... }:
 
 {
-  # ------------------------------------------------------------
-  # NIX-HOMEBREW BACKEND
-  # ------------------------------------------------------------
-  # 
-  # ---- LOAD HOMEBREW ----
-  # run declaratively under /opt/homebrew.
-  imports = [
-    nix-homebrew.darwinModules.nix-homebrew
-  ];
-  
-  # ---- NIX-HOMEBREW ----
-  nix-homebrew = {
-    enable = true;
-    user   = "ven";
-    enableRosetta = false;
-
-    # Auto-migrate existing
-    autoMigrate = true;
-  };
-
-
-  # ------------------------------------------------------------
-  # BREW & CASK MANAGEMENT
-  # ------------------------------------------------------------
-  # ---- BREW ----
   homebrew = {
     enable = true;
 
-    # ---- UPDATE BREWS AND CASKS ----
+    # Auto-update brews and casks.
     global.autoUpdate = true;
 
-    # ----- UNINSTALL REMOVED ----
+    # Remove packages that are no longer declared.
     onActivation.cleanup = "uninstall";
 
-    # --- BREWS ---
+    # ----------------------------------------------------------
+    # BREWS
+    # ----------------------------------------------------------
     brews = [
       "nginx"
     ];
 
-    # --- CASKS ---
+    # ----------------------------------------------------------
+    # CASKS
+    # ----------------------------------------------------------
     casks = [
       {
         name = "ungoogled-chromium";
-        args = { appdir = config.sharedPaths.appsRoot; };
+        # Uses aliasesShared.appsRoot from aliases-shared.nix
+        args = { appdir = aliasesShared.appsRoot; };
       }
     ];
   };

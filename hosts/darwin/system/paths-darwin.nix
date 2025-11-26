@@ -1,55 +1,33 @@
 # /Users/ven/dotfiles/nix/hosts/darwin/system/paths-darwin.nix
+#
+# DARWIN: SYSTEM PATHS
+# Adds system-wide PATH entries based on aliasesShared.
+# This module is Darwin-only and used by nix-darwin.
+# ============================================================
 
-{ ... }:
+{ aliasesShared, lib, pkgs, ... }:
 
 let
-  home    = "/Users/ven";
-  library = "${home}/Library";
-
-  applicationsRoot       = "/Applications";
-  applicationsProgramming = "${applicationsRoot}/Programming";
-
-  dotfiles = "${home}/dotfiles";
-  iCloud   = "${home}/iCloudDocs";
-
-  dockerApp        = "${applicationsProgramming}/Docker.app";
-  dockerResources  = "${dockerApp}/Contents/Resources";
-  dockerBin        = "${dockerResources}/bin";
-  dockerPluginsDir = "${dockerResources}/cli-plugins";
-
+  sp = aliasesShared;
 in
 {
-  _module.args.pathsDarwin = {
+  environment.systemPath = [
+    # HOMEBREW
+    "${sp.brewPrefix}/bin"
+    "${sp.brewPrefix}/sbin"
 
-    home      = home;
-    library   = library;
-    appSupport = "${library}/Application Support";
-    prefs      = "${library}/Preferences";
-    fontDir    = "${library}/Fonts";
-    caches     = "${library}/Caches";
-    logs       = "${library}/Logs";
+    # STANDARD MAC PATHS
+    "/usr/local/bin"
+    "/usr/local/sbin"
 
-    brewPrefix = "/opt/homebrew";
-    temp       = "/tmp";
+    # DOCKER DESKTOP PATHS
+    sp.dockerBin
+    sp.dockerPluginsDir
 
-    dotfiles   = dotfiles;
-    iCloud     = iCloud;
+    # ZED CLI
+    "${sp.applicationsProgramming}/Zed.app/Contents/MacOS"
 
-    scripts    = "${dotfiles}/nix/scripts";
-    ssl        = "${dotfiles}/ssl";
-    containers = "${dotfiles}/containers";
-
-    launchAgentsUser   = "${library}/LaunchAgents";
-    launchAgentsGlobal = "/Library/LaunchAgents";
-
-    applicationsRoot        = applicationsRoot;
-    applicationsProgramming = applicationsProgramming;
-
-    dockerApp        = dockerApp;
-    dockerResources  = dockerResources;
-    dockerBin        = dockerBin;
-    dockerPluginsDir = dockerPluginsDir;
-    dockerBinary     = "${dockerBin}/docker";
-    dockerCompose    = "${dockerPluginsDir}/docker-compose";
-  };
+    # NIX PROFILES
+    "/nix/var/nix/profiles/default/bin"
+  ];
 }
