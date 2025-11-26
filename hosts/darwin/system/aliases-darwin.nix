@@ -15,7 +15,7 @@
 { ... }:
 
 let
-  Home    = "/Users/ven";
+  home    = "/Users/ven";
   library = "${home}/Library";
 
   applicationsRoot        = "/Applications";
