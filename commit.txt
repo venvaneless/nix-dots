@@ -1,0 +1,1 @@
+git add -A && git commit -m "2025-11-26 13:38; Refactorig flake" && nix flake show ~/dotfiles/nix
